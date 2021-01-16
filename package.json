@@ -1,14 +1,23 @@
 {
-  "name": "jsnd3_mars_dashboard",
+  "name": "earth-mars-and-beyond",
   "version": "1.0.0",
-  "description": "course project",
+  "description": "Second project for the Udacity Intermediate JavaScript Nanodegree.  This project is associated with the Functional Programming in JavaScript course",
   "main": "index.js",
+  "homepage": "https://earth-mars-and-beyond.com",
+  "author": {
+    "name": "Javier Feliu",
+    "email": "javier@wanderin.dev",
+    "url": "https://wanderin.dev"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanderindev/earth-mars-and-beyond.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server/index.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
