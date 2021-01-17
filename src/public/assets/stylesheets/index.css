@@ -1,5 +1,3 @@
-/* -------------------  MOBILE  --------------------- */
-
 body {
   /*
   display: flex;
@@ -24,19 +22,18 @@ footer {
   /* footer styles */
 }
 
-/* -------------------  TABLET  --------------------- */
-@media (min-width: 768px) {
-  /* use mobile */
+@media (min-width: 769px) {
+
 }
 
-/* -------------------  DESKTOP  -------------------- */
+@media (min-width: 1024px) {
 
-@media (min-width: 1224px) {
-  /* use mobile */
 }
 
-/* -------------------  LARGE SCREENS  -------------- */
+@media (min-width: 1216px) {
 
-@media (min-width: 1824px) {
-  /* use mobile */
+}
+
+@media (min-width: 1408px) {
+
 }
