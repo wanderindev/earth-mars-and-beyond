@@ -22,8 +22,17 @@ footer {
   /* footer styles */
 }
 
+footer p {
+    display: inline-block;
+    line-height: 26px;
+}
+
+footer p .icon {
+    vertical-align: -3px;
+}
+
 footer a {
-    margin: auto 16px;
+    margin: auto 8px;
 }
 
 footer a:hover {

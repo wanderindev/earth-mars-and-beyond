@@ -37,13 +37,14 @@ const Footer = () => {
     return `
         <div class="columns is-vcentered">
             <div class="content column has-text-centered">
-                <p class="my-5">
-                    Crafted with <i class="fas fa-heart has-text-danger"></i> by an Earthling near you.
+                <p>
+                    Crafted with <span class="icon"><i class="fas fa-heart has-text-danger"></i></span> by an Earthling near you.
                 </p>
-                <p class="my-5">
-                    <a href="https://github.com/wanderindev" target="blank"><i class="fab fa-github fa-lg"></i></i></a> 
-                    <a href="https://www.linkedin.com/in/javierfeliu/" target="blank"><i class="fab fa-linkedin fa-lg"></i></i></a>
-                    <a href="https://twitter.com/JavierFeliuA" target="blank"><i class="fab fa-twitter fa-lg"></i></i></a>
+                <br>
+                <p>
+                    <a class="icon" href="https://github.com/wanderindev" target="blank"><i class="fab fa-github fa-lg"></i></i></a> 
+                    <a class="icon" href="https://www.linkedin.com/in/javierfeliu/" target="blank"><i class="fab fa-linkedin fa-lg"></i></i></a>
+                    <a class="icon" href="https://twitter.com/JavierFeliuA" target="blank"><i class="fab fa-twitter fa-lg"></i></i></a>
                 </p>
             </div>
         </div>
