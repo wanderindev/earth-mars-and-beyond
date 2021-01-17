@@ -1,7 +1,7 @@
 import {NavBar, TabPanel, Footer, ImageOfTheDay} from './components.js';
 
 const store = {
-    tabs: {active: 'Earth'},
+    tabs: {active: 'earth'},
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit']
 };
@@ -15,6 +15,7 @@ const updateStore = (store, newState) => {
 
 const render = async (root, state) => {
     root.innerHTML = App(state)
+    setListeners();
 }
 
 const App = (state) => {
@@ -44,7 +45,9 @@ const App = (state) => {
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
     render(root, store);
+});
 
+const setListeners = () => {
     // Adds event listerners after the page is rendered
     setTimeout(() => {
         // Gets reference to DOM elements for event listeners
@@ -70,26 +73,12 @@ window.addEventListener('load', () => {
             $tabItems.forEach(el => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
-                    const $target = document.getElementById(target);
 
-                    resetTabs();
-
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
+                    updateStore(store, {tabs: {active: target}});
                 });
             });
         }
-
-        // Resets active status for tabs
-        const resetTabs = () => {
-            $tabItems.forEach(el => {
-                el.classList.remove('is-active');
-            });
-            $tabContent.forEach(el => {
-                el.classList.remove('is-active');
-            });
-        }
     }, 1000);
-});
+}
 
 export {updateStore};

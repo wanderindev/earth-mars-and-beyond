@@ -28,18 +28,55 @@ const NavBar = () => {
 
 //Returns the tab panel
 const TabPanel = (active) => {
-    return `
-        <div class="tabs is-boxed is-centered">
-            <ul>
-                <li class="tab-item is-active" data-target="earth"><a>Earth</a></li>
-                <li class="tab-item" data-target="mars"><a>Mars</a></li>
-                <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
-            </ul>
-        </div>
-        <div id="earth" class="tab-content">earth goes here</div>
-        <div id="mars" class="tab-content">mars goes here</div>
-        <div id="beyond" class="tab-content">beyond goes here</div>
-    `
+    if (active === 'earth') {
+        return `
+            <div class="tabs is-boxed is-centered">
+                <ul>
+                    <li class="tab-item is-active" data-target="earth"><a>Earth</a></li>
+                    <li class="tab-item" data-target="mars"><a>Mars</a></li>
+                    <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
+                </ul>
+            </div>
+            <div id="earth" class="tab-content is-active">${EarthTabContent()}</div>
+        `
+    } else if (active === 'mars') {
+        return `
+            <div class="tabs is-boxed is-centered">
+                <ul>
+                    <li class="tab-item" data-target="earth"><a>Earth</a></li>
+                    <li class="tab-item is-active" data-target="mars"><a>Mars</a></li>
+                    <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
+                </ul>
+            </div>
+            <div id="mars" class="tab-content is-active">${MarsTabContent()}</div>
+        `
+    } else {
+        return `
+            <div class="tabs is-boxed is-centered">
+                <ul>
+                    <li class="tab-item" data-target="earth"><a>Earth</a></li>
+                    <li class="tab-item" data-target="mars"><a>Mars</a></li>
+                    <li class="tab-item is-active" data-target="beyond"><a>And Beyond...</a></li>
+                </ul>
+            </div>
+            <div id="beyond" class="tab-content is-active">${BeyondTabContent()}</div>
+        `
+    }
+}
+
+// Returns the content for the earth tab
+const EarthTabContent = () => {
+    return `earth content goes here`;
+}
+
+// Returns the content for the beyond tab
+const MarsTabContent = () => {
+    return `mars content goes here`;
+}
+
+// Returns the content for the beyond tab
+const BeyondTabContent = () => {
+    return `beyond content goes here`;
 }
 
 const ImageOfTheDay = (state) => {
