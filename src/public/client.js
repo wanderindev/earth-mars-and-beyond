@@ -1,7 +1,7 @@
-import {Greeting, ImageOfTheDay} from './components.js';
+import {PageTitle, Footer, ImageOfTheDay} from './components.js';
 
 const store = {
-    user: { name: 'Javier' },
+    location: 'Earth',
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit']
 };
@@ -22,7 +22,7 @@ const App = (state) => {
     return `
         <header></header>
         <main>
-            ${Greeting(state.user.name)}
+            ${PageTitle(state.location)}
             <section>
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
@@ -37,7 +37,7 @@ const App = (state) => {
                 ${ImageOfTheDay(state)}
             </section>
         </main>
-        <footer></footer>
+        <footer class="footer">${Footer()}</footer>
     `
 }
 

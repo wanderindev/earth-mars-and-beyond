@@ -22,6 +22,14 @@ footer {
   /* footer styles */
 }
 
+footer a {
+    margin: auto 16px;
+}
+
+footer a:hover {
+    color: #0d56d7
+}
+
 @media (min-width: 769px) {
 
 }
