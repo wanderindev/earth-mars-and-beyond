@@ -1,7 +1,7 @@
-import {NavBar, PageTitle, Footer, ImageOfTheDay} from './components.js';
+import {NavBar, TabPanel, Footer, ImageOfTheDay} from './components.js';
 
 const store = {
-    location: 'Earth',
+    tabs: {active: 'Earth'},
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit']
 };
@@ -22,7 +22,7 @@ const App = (state) => {
         <header></header>
         <main>
             <nav class="navbar" role="navigation" aria-label="main navigation">${NavBar()}</nav>
-            ${PageTitle(state.location)}
+            <div>${TabPanel(state.tabs.active)}</div>
             <section>
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
@@ -47,11 +47,14 @@ window.addEventListener('load', () => {
 
     // Adds event listerners after the page is rendered
     setTimeout(() => {
-        // Adds event listener for navigation burgers
+        // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
+        const $tabContent = Array.prototype.slice.call(document.querySelectorAll('.tab-content'), 0);
 
+        // Adds event listener for navigation burgers
         if ($navbarBurgers.length > 0) {
-            $navbarBurgers.forEach( el => {
+            $navbarBurgers.forEach(el => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
                     const $target = document.getElementById(target);
@@ -61,7 +64,32 @@ window.addEventListener('load', () => {
                 });
             });
         }
-    }, 3000);
+
+        // Adds event listener for tabs
+        if ($tabItems.length > 0) {
+            $tabItems.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    resetTabs();
+
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        }
+
+        // Resets active status for tabs
+        const resetTabs = () => {
+            $tabItems.forEach(el => {
+                el.classList.remove('is-active');
+            });
+            $tabContent.forEach(el => {
+                el.classList.remove('is-active');
+            });
+        }
+    }, 1000);
 });
 
 export {updateStore};

@@ -26,12 +26,21 @@ const NavBar = () => {
     `
 }
 
-// Returns the page's title
-const PageTitle = (location) => {
+//Returns the tab panel
+const TabPanel = (active) => {
     return `
-        <h1>Welcome to ${location}!</h1>
+        <div class="tabs is-boxed is-centered">
+            <ul>
+                <li class="tab-item is-active" data-target="earth"><a>Earth</a></li>
+                <li class="tab-item" data-target="mars"><a>Mars</a></li>
+                <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
+            </ul>
+        </div>
+        <div id="earth" class="tab-content">earth goes here</div>
+        <div id="mars" class="tab-content">mars goes here</div>
+        <div id="beyond" class="tab-content">beyond goes here</div>
     `
-};
+}
 
 const ImageOfTheDay = (state) => {
     // If image does not already exist, or it is not from today -- request it again
@@ -76,4 +85,4 @@ const Footer = () => {
     `
 }
 
-export {NavBar, PageTitle, Footer, ImageOfTheDay};
+export {NavBar, TabPanel, Footer, ImageOfTheDay};

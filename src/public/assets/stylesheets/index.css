@@ -18,6 +18,18 @@ main {
    */
 }
 
+.navbar {
+    margin-bottom: 36px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.is-active {
+    display: block;
+}
+
 footer {
   /* footer styles */
 }
