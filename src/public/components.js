@@ -1,14 +1,9 @@
 import {getImageOfTheDay} from './apiCalls.js';
 
-const Greeting = (name) => {
-    if (name) {
-        return `
-            <h1>Welcome, ${name}!</h1>
-        `
-    }
-
+// Returns the page title
+const PageTitle = (location) => {
     return `
-        <h1>Hello!</h1>
+        <h1>Welcome to ${location}!</h1>
     `
 };
 
@@ -37,4 +32,4 @@ const ImageOfTheDay = (state) => {
     }
 }
 
-export {Greeting, ImageOfTheDay};
+export {PageTitle, ImageOfTheDay};
