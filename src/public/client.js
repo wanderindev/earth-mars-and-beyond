@@ -1,4 +1,4 @@
-import {PageTitle, Footer, ImageOfTheDay} from './components.js';
+import {NavBar, PageTitle, Footer, ImageOfTheDay} from './components.js';
 
 const store = {
     location: 'Earth',
@@ -18,10 +18,10 @@ const render = async (root, state) => {
 }
 
 const App = (state) => {
-    console.log(state.apod);
     return `
         <header></header>
         <main>
+            <nav class="navbar" role="navigation" aria-label="main navigation">${NavBar()}</nav>
             ${PageTitle(state.location)}
             <section>
                 <h3>Put things on the page!</h3>
@@ -43,7 +43,25 @@ const App = (state) => {
 
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
-    render(root, store)
-})
+    render(root, store);
+
+    // Adds event listerners after the page is rendered
+    setTimeout(() => {
+        // Adds event listener for navigation burgers
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        if ($navbarBurgers.length > 0) {
+            $navbarBurgers.forEach( el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        }
+    }, 3000);
+});
 
 export {updateStore};

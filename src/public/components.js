@@ -1,6 +1,32 @@
 import {getImageOfTheDay} from './apiCalls.js';
 
-// Returns the page title
+// Returns the page's main navigation
+const NavBar = () => {
+    return `
+        <div class="navbar-brand">
+            <a class="navbar-item has-text-black is-uppercase has-text-weight-semibold" href="#">
+                <img src="" alt="" width="112" height="28">
+                Earth, Mars, and Beyond
+            </a>
+            
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="mainMenu" class="navbar-menu">
+            <div class="navbar-end">    
+                <a class="navbar-item">Explore</a>
+                <a class="navbar-item">About</a>
+                <a class="navbar-item">Contact</a>
+            </div>
+        </div>
+    `
+}
+
+// Returns the page's title
 const PageTitle = (location) => {
     return `
         <h1>Welcome to ${location}!</h1>
@@ -8,7 +34,6 @@ const PageTitle = (location) => {
 };
 
 const ImageOfTheDay = (state) => {
-    console.log(state);
     // If image does not already exist, or it is not from today -- request it again
     const today = new Date()
     const photodate = new Date(state.apod.date)
@@ -32,7 +57,7 @@ const ImageOfTheDay = (state) => {
     }
 }
 
-// Returns the page footer
+// Returns the page's footer
 const Footer = () => {
     return `
         <div class="columns is-vcentered">
@@ -51,4 +76,4 @@ const Footer = () => {
     `
 }
 
-export {PageTitle, Footer, ImageOfTheDay};
+export {NavBar, PageTitle, Footer, ImageOfTheDay};
