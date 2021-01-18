@@ -30,8 +30,23 @@ main {
     display: block;
 }
 
+.apod-info {
+    width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: 0.85rem;
+}
+
+.apod-img {
+    max-width: 100%;
+    width: 600px;
+    height: auto;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
 footer {
-  /* footer styles */
+  margin-top: 48px;
 }
 
 footer p {
@@ -52,15 +67,22 @@ footer a:hover {
 }
 
 @media (min-width: 769px) {
+    .apod-info {
+        width: 300px;
+    }
 
 }
 
 @media (min-width: 1024px) {
-
+    .apod-info {
+        width: 350px;
+    }
 }
 
 @media (min-width: 1216px) {
-
+    .apod-info {
+        width: 400px;
+    }
 }
 
 @media (min-width: 1408px) {

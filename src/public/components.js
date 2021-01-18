@@ -1,4 +1,6 @@
 import {getImageOfTheDay} from './apiCalls.js';
+import {store, updateStore} from './client.js'
+//import {apodFormatDate} from "./utils";
 
 // Returns the page's main navigation
 const NavBar = () => {
@@ -27,7 +29,9 @@ const NavBar = () => {
 }
 
 //Returns the tab panel
-const TabPanel = (active) => {
+const TabPanel = (state) => {
+    const active = state.tabs.active;
+
     if (active === 'earth') {
         return `
             <div class="tabs is-boxed is-centered">
@@ -37,7 +41,7 @@ const TabPanel = (active) => {
                     <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
                 </ul>
             </div>
-            <div id="earth" class="tab-content is-active">${EarthTabContent()}</div>
+            <div id="earth" class="tab-content is-active">${EarthTabContent(store)}</div>
         `
     } else if (active === 'mars') {
         return `
@@ -48,7 +52,7 @@ const TabPanel = (active) => {
                     <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
                 </ul>
             </div>
-            <div id="mars" class="tab-content is-active">${MarsTabContent()}</div>
+            <div id="mars" class="tab-content is-active">${MarsTabContent(store)}</div>
         `
     } else {
         return `
@@ -59,48 +63,69 @@ const TabPanel = (active) => {
                     <li class="tab-item is-active" data-target="beyond"><a>And Beyond...</a></li>
                 </ul>
             </div>
-            <div id="beyond" class="tab-content is-active">${BeyondTabContent()}</div>
+            <div id="beyond" class="tab-content is-active">${BeyondTabContent(store)}</div>
         `
     }
 }
 
 // Returns the content for the earth tab
-const EarthTabContent = () => {
+const EarthTabContent = (state) => {
     return `earth content goes here`;
 }
 
 // Returns the content for the beyond tab
-const MarsTabContent = () => {
+const MarsTabContent = (state) => {
     return `mars content goes here`;
 }
 
 // Returns the content for the beyond tab
-const BeyondTabContent = () => {
-    return `beyond content goes here`;
-}
+const BeyondTabContent = (state) => {
+    const imgDate = state.apod.date;
+    const imgUrl = state.apod.url;
+    let reqDate = state.apod.reqDate;
 
-const ImageOfTheDay = (state) => {
-    // If image does not already exist, or it is not from today -- request it again
-    const today = new Date()
-    const photodate = new Date(state.apod.date)
-
-    if (!state.apod || state.apod.date === today.getDate() ) {
-        getImageOfTheDay(state)
+    if (imgDate === reqDate && state.apod.media_type === "video") {
+        const sStart = reqDate.substring(0, 8);
+        const sEnd = String(parseInt(reqDate.substring(8, 10)) - 1).padStart(2, '0');
+        reqDate = sStart + sEnd;
     }
 
-    // check if the photo of the day is actually type video!
-    if (state.apod.media_type === "video") {
-        return (`
-            <p>See today's featured video <a href="${state.apod.url}">here</a></p>
-            <p>${state.apod.title}</p>
-            <p>${state.apod.explanation}</p>
-        `)
-    } else {
-        return (`
-            <img src="${state.apod.image.url}" height="312px" width="312px" />
-            <p>${state.apod.image.explanation}</p>
-        `)
+    if (!imgUrl || imgDate !== reqDate) {
+        getImageOfTheDay(reqDate).then(resp => {
+            resp.image.reqDate = reqDate;
+            updateStore(store, {apod: resp.image});
+        });
     }
+
+    return `
+        <div class="columns">
+            <div class="column has-text-centered">
+                <img class="apod-img" src="${state.apod.url}" alt="Astronomy picture of the day for ${imgDate}" />
+            </div>
+            <div class="column is-narrow">
+                <div class="apod-info">
+                    <div class="block">
+                        <p class="has-text-weight-semibold">Date:</p>
+                        <input id="apod-calendar" type="date">
+                    </div>  
+                    <div class="block">
+                        <p class="has-text-weight-semibold">Title:</p>
+                        ${state.apod.title}
+                    </div>
+                    <div class="block has-text-justified">
+                        <p class="has-text-weight-semibold">Image Details:</p>
+                        ${state.apod.explanation}
+                    </div>
+                    <div class="block">
+                    
+                    </div>
+                    <div class="block">
+                    
+                    </div>                                                                         
+                </div>
+            </div>
+        </div>
+    `
 }
 
 // Returns the page's footer
@@ -122,4 +147,4 @@ const Footer = () => {
     `
 }
 
-export {NavBar, TabPanel, Footer, ImageOfTheDay};
+export {NavBar, TabPanel, Footer};

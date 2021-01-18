@@ -1,20 +1,21 @@
-import {NavBar, TabPanel, Footer, ImageOfTheDay} from './components.js';
+import {NavBar, TabPanel, Footer} from './components.js';
+import {apodFormatDate} from './utils.js'
 
 const store = {
     tabs: {active: 'earth'},
-    apod: '',
+    apod: {reqDate: apodFormatDate(new Date())},
     rovers: ['Curiosity', 'Opportunity', 'Spirit']
 };
 
 const root = document.getElementById('root');
 
 const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
-    render(root, store).then();
+    store = Object.assign(store, newState);
+    render(root, store);
 }
 
 const render = async (root, state) => {
-    root.innerHTML = App(state)
+    root.innerHTML = App(state);
     setListeners();
 }
 
@@ -23,20 +24,7 @@ const App = (state) => {
         <header></header>
         <main>
             <nav class="navbar" role="navigation" aria-label="main navigation">${NavBar()}</nav>
-            <div>${TabPanel(state.tabs.active)}</div>
-            <section>
-                <h3>Put things on the page!</h3>
-                <p>Here is an example section.</p>
-                <p>
-                    One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
-                    the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
-                    This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
-                    applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
-                    explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
-                    but generally help with discoverability of relevant imagery.
-                </p>
-                ${ImageOfTheDay(state)}
-            </section>
+            <div>${TabPanel(state)}</div>
         </main>
         <footer class="footer">${Footer()}</footer>
     `
@@ -53,7 +41,8 @@ const setListeners = () => {
         // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
-        const $tabContent = Array.prototype.slice.call(document.querySelectorAll('.tab-content'), 0);
+        const $calendars = bulmaCalendar.attach('[type="date"]', {});
+        const $apodCalendar = document.querySelector('#apod-calendar');
 
         // Adds event listener for navigation burgers
         if ($navbarBurgers.length > 0) {
@@ -78,7 +67,23 @@ const setListeners = () => {
                 });
             });
         }
+
+        // Initializes all Bulma calendars
+        $calendars.forEach(calendar => {
+            // Add listener to select event
+            calendar.on('select', date => {
+                console.log(date);
+            });
+        });
+
+        // Accesses the APOD calendar
+        if ($apodCalendar) {
+            $apodCalendar.bulmaCalendar.on('select', datepicker => {
+                console.log(datepicker.data.value());
+            });
+        }
+
     }, 1000);
 }
 
-export {updateStore};
+export {store, updateStore};
