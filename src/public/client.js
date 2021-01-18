@@ -9,16 +9,40 @@ const store = {
 
 const root = document.getElementById('root');
 
+/**
+ * @description Updates the store
+ * @param {object} store - The DOM element where the page will be rendered
+ * @param {object} newState - The application's state
+ */
 const updateStore = (store, newState) => {
-    store = Object.assign(store, newState);
+    return Object.assign(store, newState);
+}
+
+/**
+ * @description Updates the store and renders the page
+ * @param {object} store - The DOM element where the page will be rendered
+ * @param {object} newState - The application's state
+ */
+const updateStoreAndRender = (store, newState) => {
+    store = updateStore(store, newState);
     render(root, store);
 }
 
+/**
+ * @description Renders the entire page
+ * @param {object} root - The DOM element where the page will be rendered
+ * @param {object} state - The application's state
+ */
 const render = async (root, state) => {
     root.innerHTML = App(state);
     setListeners();
 }
 
+/**
+ * @description Returns the HTML for the entire page
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the entire page
+ */
 const App = (state) => {
     return `
         <header></header>
@@ -30,11 +54,17 @@ const App = (state) => {
     `
 }
 
-// listening for load event because page should load before any JS is called
+/**
+ * @description Calls the render() function on window.load.
+ */
 window.addEventListener('load', () => {
     render(root, store);
 });
 
+
+/**
+ * @description Attaches event listeners to various DOM elements.  This function is called in the render() function.
+ */
 const setListeners = () => {
     // Adds event listerners after the page is rendered
     setTimeout(() => {

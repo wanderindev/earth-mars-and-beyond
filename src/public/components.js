@@ -1,8 +1,11 @@
 import {getImageOfTheDay} from './apiCalls.js';
 import {store, updateStore} from './client.js'
-//import {apodFormatDate} from "./utils";
 
-// Returns the page's main navigation
+
+/**
+ * @description Returns the NavBar component
+ * @return {string} html - The HTML for the NavBar
+ */
 const NavBar = () => {
     return `
         <div class="navbar-brand">
@@ -28,7 +31,11 @@ const NavBar = () => {
     `
 }
 
-//Returns the tab panel
+/**
+ * @description Returns the TabPanel component
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the TabPanel
+ */
 const TabPanel = (state) => {
     const active = state.tabs.active;
 
@@ -68,17 +75,29 @@ const TabPanel = (state) => {
     }
 }
 
-// Returns the content for the earth tab
+/**
+ * @description Returns the EarthTabContent component
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the EarthTabContent
+ */
 const EarthTabContent = (state) => {
     return `earth content goes here`;
 }
 
-// Returns the content for the beyond tab
+/**
+ * @description Returns the MarsTabContent component
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the MarsTabContent
+ */
 const MarsTabContent = (state) => {
     return `mars content goes here`;
 }
 
-// Returns the content for the beyond tab
+/**
+ * @description Returns the BeyondTabContent component
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the BeyondTabContent
+ */
 const BeyondTabContent = (state) => {
     const imgDate = state.apod.date;
     const imgUrl = state.apod.url;
@@ -128,7 +147,10 @@ const BeyondTabContent = (state) => {
     `
 }
 
-// Returns the page's footer
+/**
+ * @description Returns the Footer component
+ * @return {string} html - The HTML for the Footer
+ */
 const Footer = () => {
     return `
         <div class="columns is-vcentered">
