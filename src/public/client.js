@@ -18,7 +18,7 @@ const updateStore = (store, newState) => {
  * @param {object} store - The DOM element where the page will be rendered
  * @param {object} newState - The application's state
  */
-const updateStoreAndRender = (store, newState) => {
+const updateAndRender = (store, newState) => {
     store = updateStore(store, newState);
     render(root, store);
 }
@@ -56,7 +56,4 @@ window.addEventListener('load', () => {
     render(root, store);
 });
 
-
-
-
-export {updateStore};
+export {updateAndRender, updateStore};

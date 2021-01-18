@@ -1,5 +1,5 @@
-import {getImageOfTheDay} from './apiCalls.js';
-import {updateStore} from './client.js'
+import {getImageOfTheDay} from './api-calls.js';
+import {updateAndRender, updateStore} from './client.js'
 import {store} from './store.js'
 
 /**
