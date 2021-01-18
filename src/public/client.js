@@ -1,11 +1,5 @@
 import {NavBar, TabPanel, Footer} from './components.js';
-import {apodFormatDate} from './utils.js'
-
-const store = {
-    tabs: {active: 'earth'},
-    apod: {reqDate: apodFormatDate(new Date())},
-    rovers: ['Curiosity', 'Opportunity', 'Spirit']
-};
+import {store} from './store.js'
 
 const root = document.getElementById('root');
 
@@ -116,4 +110,4 @@ const setListeners = () => {
     }, 1000);
 }
 
-export {store, updateStore};
+export {updateStore};

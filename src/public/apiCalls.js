@@ -1,5 +1,3 @@
-import {updateStore} from './client.js';
-
 /**
  * @description Gets the APOD image information from the backend
  * @param {string} date - A string representing a date in the format YYYY-MM-DD

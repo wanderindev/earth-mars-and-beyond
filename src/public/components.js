@@ -1,6 +1,6 @@
 import {getImageOfTheDay} from './apiCalls.js';
-import {store, updateStore} from './client.js'
-
+import {updateStore} from './client.js'
+import {store} from './store.js'
 
 /**
  * @description Returns the NavBar component
