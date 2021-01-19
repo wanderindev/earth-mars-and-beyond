@@ -2,6 +2,7 @@ import {getImageOfTheDay} from './api-calls.js';
 import {updateAndRender, updateStore} from './client.js'
 import {store} from './store.js'
 
+
 /**
  * @description Returns the NavBar component
  * @return {string} html - The HTML for the NavBar
@@ -112,7 +113,7 @@ const BeyondTabContent = (state) => {
     if (!imgUrl || imgDate !== reqDate) {
         getImageOfTheDay(reqDate).then(resp => {
             resp.image.reqDate = reqDate;
-            updateStore(store, {apod: resp.image});
+            updateAndRender(store, {apod: resp.image});
         });
     }
 

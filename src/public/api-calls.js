@@ -5,7 +5,8 @@
  */
 const getImageOfTheDay = (date) => {
     return fetch(`http://localhost:3000/apod/` + date)
-        .then(res => res.json());
+        .then(res => res.json())
+        .then(json => console.log(json));
 }
 
 export {getImageOfTheDay};

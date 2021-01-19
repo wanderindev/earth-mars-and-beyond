@@ -1,18 +1,16 @@
-require('dotenv').config()
-const express = require('express')
-const bodyParser = require('body-parser')
-const fetch = require('node-fetch')
-const path = require('path')
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
+const path = require('path');
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-app.use('/', express.static(path.join(__dirname, '../public')))
-
-// your API calls
+app.use('/', express.static(path.join(path.resolve(), 'src/public')));
 
 // example API call
 app.get('/apod/:date', async (req, res) => {
@@ -24,11 +22,6 @@ app.get('/apod/:date', async (req, res) => {
     } catch (err) {
         console.log('error:', err);
     }
-})
+});
 
-
-
-
-
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -1,6 +1,7 @@
 import {Footer, NavBar, TabPanel} from './components.js';
-import {setListeners} from "./listeners";
+import {setListeners} from "./listeners.js";
 import {store} from './store.js'
+
 
 const root = document.getElementById('root');
 

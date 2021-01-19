@@ -1,5 +1,6 @@
-import {store} from "./store";
-import {updateStore} from "./client";
+import {store} from "./store.js";
+import {updateAndRender} from "./client.js";
+
 
 /**
  * @description Attaches event listeners to various DOM elements.  This function is called in the render() function.
@@ -32,7 +33,7 @@ const setListeners = () => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
 
-                    updateStore(store, {tabs: {active: target}});
+                    updateAndRender(store, {tabs: {active: target}});
                 });
             });
         }
