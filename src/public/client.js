@@ -1,6 +1,7 @@
 import {Footer, NavBar, TabPanel} from './components.js';
 import {setListeners} from "./listeners.js";
 import {store} from './store.js'
+import {updateApodBlockedDates} from "./utils.js";
 
 
 const root = document.getElementById('root');
@@ -55,6 +56,8 @@ const App = (state) => {
  */
 window.addEventListener('load', () => {
     render(root, store);
+
+    updateApodBlockedDates(store.apod);
 });
 
 export {updateAndRender, updateStore};
