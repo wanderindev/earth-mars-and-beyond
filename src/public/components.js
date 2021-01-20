@@ -40,40 +40,30 @@ const NavBar = () => {
 const TabPanel = (state) => {
     const active = state.tabs.active;
 
-    if (active === 'earth') {
-        return `
-            <div class="tabs is-boxed is-centered">
-                <ul>
-                    <li class="tab-item is-active" data-target="earth"><a>Earth</a></li>
-                    <li class="tab-item" data-target="mars"><a>Mars</a></li>
-                    <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
-                </ul>
-            </div>
-            <div id="earth" class="tab-content is-active">${EarthTabContent(store)}</div>
-        `
-    } else if (active === 'mars') {
-        return `
-            <div class="tabs is-boxed is-centered">
-                <ul>
-                    <li class="tab-item" data-target="earth"><a>Earth</a></li>
-                    <li class="tab-item is-active" data-target="mars"><a>Mars</a></li>
-                    <li class="tab-item" data-target="beyond"><a>And Beyond...</a></li>
-                </ul>
-            </div>
-            <div id="mars" class="tab-content is-active">${MarsTabContent(store)}</div>
-        `
-    } else {
-        return `
-            <div class="tabs is-boxed is-centered">
-                <ul>
-                    <li class="tab-item" data-target="earth"><a>Earth</a></li>
-                    <li class="tab-item" data-target="mars"><a>Mars</a></li>
-                    <li class="tab-item is-active" data-target="beyond"><a>And Beyond...</a></li>
-                </ul>
-            </div>
-            <div id="beyond" class="tab-content is-active">${BeyondTabContent(store)}</div>
-        `
-    }
+    return `
+        <div class="tabs is-boxed is-centered">
+            <ul>
+                <li class="tab-item ${active === 'earth' ? 'is-active' : ''}" data-target="earth">
+                    <a>Earth</a>
+                </li>
+                <li class="tab-item ${active === 'mars' ? 'is-active' : ''}" data-target="mars">
+                    <a>Mars</a>
+                </li>
+                <li class="tab-item ${active === 'beyond' ? 'is-active' : ''}" data-target="beyond">
+                    <a>And Beyond...</a>
+                </li>
+            </ul>
+        </div>
+        <div id="earth" class="tab-content ${active === 'earth' ? 'is-active' : ''}">
+            ${active === 'earth' ? EarthTabContent(store) : ''}
+        </div>
+        <div id="mars" class="tab-content ${active === 'mars' ? 'is-active' : ''}">
+            ${active === 'mars' ? MarsTabContent(store) : ''}
+        </div>
+        <div id="beyond" class="tab-content ${active === 'beyond' ? 'is-active' : ''}">
+            ${active === 'beyond' ? BeyondTabContent(store) : ''}
+        </div>
+    `
 }
 
 /**
