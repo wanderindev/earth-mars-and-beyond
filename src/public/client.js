@@ -1,6 +1,6 @@
 import {Footer, NavBar, TabPanel} from './components.js';
 import {setListeners} from "./listeners.js";
-import {store} from './store.js'
+import {store} from './store.js';
 import {updateApodBlockedDates} from "./utils.js";
 
 
@@ -33,7 +33,7 @@ const updateAndRender = (store, newState) => {
 const render = async (root, state) => {
     root.innerHTML = App(state);
     setListeners();
-}
+};
 
 /**
  * @description Returns the HTML for the entire page
@@ -49,13 +49,14 @@ const App = (state) => {
         </main>
         <footer class="footer">${Footer()}</footer>
     `
-}
+};
 
 /**
  * @description Calls the render() function on window.load.
  */
 window.addEventListener('load', () => {
     render(root, store);
+
 
     updateApodBlockedDates(store.apod);
 });

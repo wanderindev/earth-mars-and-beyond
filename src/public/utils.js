@@ -1,6 +1,6 @@
-import {getImagesForDateRange} from './api-calls.js'
+import {getImageForDate, getImagesForDateRange} from './api-calls.js';
 import {store} from "./store.js";
-import {updateStore} from "./client.js";
+import {updateAndRender, updateStore} from "./client.js";
 
 
 /**
@@ -10,7 +10,23 @@ import {updateStore} from "./client.js";
  */
 const apodFormatDate = (date) => {
     return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-}
+};
+
+/**
+ * @description Returns a string representing a date in format YYYY-MM-DD
+ * @param {string} date - A string representing a date in format YYYY-MM-DD
+ * @param {object} image - An object representing an image
+ * @param {object} apod - An object with information for the APOD API
+ * @return {object} store - The updated store object
+ */
+const cacheImage = (date, image, apod) => {
+    const newCachedImgs = [...apod.cachedImgs, image];
+    const newApod = Object.assign(apod, {reqDate: date, currentImg: image, cachedImgs: newCachedImgs});
+
+    return updateAndRender(store, {
+        apod: newApod
+    });
+};
 
 /**
  * @description Updates the blockedDates array for the APOD API
@@ -19,10 +35,10 @@ const apodFormatDate = (date) => {
  */
 const updateApodBlockedDates = (apod) => {
     const startDate = apod.checkedUntil;
-    const endDate = apod.today;
+    const endDate = apodFormatDate(new Date());
 
     getImagesForDateRange(startDate, endDate).then(images => {
-        const newBlockedDates = images.filter(image => image.media_type === 'image').map(image => image.date);
+        const newBlockedDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
 
         if (newBlockedDates.length > 0) {
             const updatedDates = [...apod.blockedDates, ...newBlockedDates];
@@ -34,6 +50,49 @@ const updateApodBlockedDates = (apod) => {
         }
     });
 
-}
+};
 
-export {apodFormatDate, updateApodBlockedDates};
+/**
+ * @description Gets the APOD image information from the backend
+ * @param {string} date - A string representing a date in the format YYYY-MM-DD
+ * @param {object} state - The application's state
+ * @return {object} response - An object with the APOD image information
+ */
+const updateApodImage = (date, state) => {
+    const cachedImgsDates = state.apod.cachedImgs.map(image => image.date);
+
+    // The requested image is the current image.
+    if (state.apod.currentImg && state.apod.currentImg.date === date) {
+        return state.apod.currentImg;
+    // The requested image is in the cache.
+    } else if (cachedImgsDates.includes(date)) {
+        return state.apod.cachedImgs.filter(image => image.date === date).map(image => {
+            return {
+                date: image.date,
+                title: image.title,
+                explanation: image.explanation,
+                copyright: image.copyright,
+                url: image.url
+            }
+        });
+    // Get the new image from the API
+    } else {
+        getImageForDate(date).then(images => {
+            const image = images.map(image => {
+                return {
+                    date: image.date,
+                    title: image.title,
+                    explanation: image.explanation,
+                    copyright: image.copyright,
+                    url: image.url
+                }
+            })[0];
+
+            cacheImage(date, image, state.apod);
+
+            return image;
+        });
+    }
+};
+
+export {apodFormatDate, cacheImage, updateApodBlockedDates, updateApodImage};

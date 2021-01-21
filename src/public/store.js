@@ -1,13 +1,12 @@
-import {apodFormatDate} from './utils.js';
-
 const store = {
     tabs: {
         active: 'earth'
     },
     apod: {
-        today: apodFormatDate(new Date()),
-        reqDate: apodFormatDate(new Date()),
+        reqDate: '',
         checkedUntil: '2021-01-19',
+        cachedImgs: [],
+        currentImg: {},
         blockedDates: [
             '2008-07-22',
             '2008-11-25',

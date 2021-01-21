@@ -1,6 +1,5 @@
-import {getImageOfTheDay} from './api-calls.js';
-import {updateAndRender, updateStore} from './client.js'
-import {store} from './store.js'
+import {apodFormatDate, updateApodImage} from './utils.js';
+import {store} from './store.js';
 
 
 /**
@@ -30,7 +29,7 @@ const NavBar = () => {
             </div>
         </div>
     `
-}
+};
 
 /**
  * @description Returns the TabPanel component
@@ -64,7 +63,7 @@ const TabPanel = (state) => {
             ${active === 'beyond' ? BeyondTabContent(store) : ''}
         </div>
     `
-}
+};
 
 /**
  * @description Returns the EarthTabContent component
@@ -72,8 +71,8 @@ const TabPanel = (state) => {
  * @return {string} html - The HTML for the EarthTabContent
  */
 const EarthTabContent = (state) => {
-    return `earth content goes here`;
-}
+    return `${state}`;
+};
 
 /**
  * @description Returns the MarsTabContent component
@@ -81,8 +80,8 @@ const EarthTabContent = (state) => {
  * @return {string} html - The HTML for the MarsTabContent
  */
 const MarsTabContent = (state) => {
-    return `mars content goes here`;
-}
+    return `${state}`;
+};
 
 /**
  * @description Returns the BeyondTabContent component
@@ -90,53 +89,39 @@ const MarsTabContent = (state) => {
  * @return {string} html - The HTML for the BeyondTabContent
  */
 const BeyondTabContent = (state) => {
-    const imgDate = state.apod.date;
-    const imgUrl = state.apod.url;
-    let reqDate = state.apod.reqDate;
+    const date = state.apod.reqDate || apodFormatDate(new Date());
+    const image = updateApodImage(date, state);
 
-    if (imgDate === reqDate && state.apod.media_type === "video") {
-        const sStart = reqDate.substring(0, 8);
-        const sEnd = String(parseInt(reqDate.substring(8, 10)) - 1).padStart(2, '0');
-        reqDate = sStart + sEnd;
-    }
-
-    if (!imgUrl || imgDate !== reqDate) {
-        getImageOfTheDay(reqDate).then(resp => {
-            resp.image.reqDate = reqDate;
-            updateAndRender(store, {apod: resp.image});
-        });
-    }
-
-    return `
-        <div class="columns">
-            <div class="column has-text-centered">
-                <img class="apod-img" src="${state.apod.url}" alt="Astronomy picture of the day for ${imgDate}" />
-            </div>
-            <div class="column is-narrow">
-                <div class="apod-info">
-                    <div class="block">
-                        <p class="has-text-weight-semibold">Date:</p>
-                        <input id="apod-calendar" type="date">
-                    </div>  
-                    <div class="block">
-                        <p class="has-text-weight-semibold">Title:</p>
-                        ${state.apod.title}
+    if (image) {
+        return `
+            <div class="columns">
+                <div class="column has-text-centered">
+                    <img class="apod-img" src="${image.url}" alt="Astronomy picture of the day for ${image.date}" />
+                </div>
+                <div class="column is-narrow">
+                    <div class="apod-info">
+                        <div class="block">
+                            <p class="has-text-weight-semibold">Date:</p>
+                            <input id="apod-calendar" type="date">
+                        </div>  
+                        <div class="block">
+                            <p class="has-text-weight-semibold">Title:</p>
+                            ${image.title}
+                        </div>
+                        <div class="block has-text-justified">
+                            <p class="has-text-weight-semibold">Image Details:</p>
+                            ${image.explanation}
+                        </div>
+                        <div class="block">
+                            <p class="has-text-weight-semibold">Copyright:</p>
+                            ${image.copyright}
+                        </div>                                                                      
                     </div>
-                    <div class="block has-text-justified">
-                        <p class="has-text-weight-semibold">Image Details:</p>
-                        ${state.apod.explanation}
-                    </div>
-                    <div class="block">
-                    
-                    </div>
-                    <div class="block">
-                    
-                    </div>                                                                         
                 </div>
             </div>
-        </div>
-    `
-}
+        `
+    }
+};
 
 /**
  * @description Returns the Footer component
@@ -158,6 +143,6 @@ const Footer = () => {
             </div>
         </div>
     `
-}
+};
 
 export {NavBar, TabPanel, Footer};

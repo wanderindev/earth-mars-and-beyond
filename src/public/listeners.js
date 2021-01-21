@@ -54,6 +54,6 @@ const setListeners = () => {
         }
 */
     }, 1000);
-}
+};
 
 export {setListeners};
