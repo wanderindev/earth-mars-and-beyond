@@ -1,7 +1,7 @@
 import {Footer, NavBar, TabPanel} from './components.js';
 import {setListeners} from "./listeners.js";
 import {store} from './store.js';
-import {updateApodBlockedDates} from "./utils.js";
+import {updateApodDisabledDates} from "./utils.js";
 
 
 const root = document.getElementById('root');
@@ -32,7 +32,7 @@ const updateAndRender = (store, newState) => {
  */
 const render = async (root, state) => {
     root.innerHTML = App(state);
-    setListeners();
+    setListeners(state);
 };
 
 /**
@@ -55,10 +55,8 @@ const App = (state) => {
  * @description Calls the render() function on window.load.
  */
 window.addEventListener('load', () => {
+    updateApodDisabledDates(store.apod);
     render(root, store);
-
-
-    updateApodBlockedDates(store.apod);
 });
 
 export {updateAndRender, updateStore};

@@ -29,20 +29,35 @@ const cacheImage = (date, image, apod) => {
 };
 
 /**
+ * @description Returns a an array of disabled dates
+ * @param {object} apod - An object with information for the APOD API
+ * @return {array} disabledDates - An array with disabled dates
+ */
+const getApodDisabledDates = (apod) => {
+    return apod.disabledDates.map(date => {
+        return new Date(
+            parseInt(date.substring(0, 4)),
+            parseInt(date.substring(5, 7)) - 1,
+            parseInt(date.substring(8, 10))
+        );
+    });
+}
+
+/**
  * @description Updates the blockedDates array for the APOD API
  * @param {object} apod - An object with information for the APOD API
  * @return {object} store - The updated store object
  */
-const updateApodBlockedDates = (apod) => {
+const updateApodDisabledDates = (apod) => {
     const startDate = apod.checkedUntil;
     const endDate = apodFormatDate(new Date());
 
     getImagesForDateRange(startDate, endDate).then(images => {
-        const newBlockedDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
+        const newDisabledDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
 
-        if (newBlockedDates.length > 0) {
-            const updatedDates = [...apod.blockedDates, ...newBlockedDates];
-            const newApod = Object.assign(apod, {blockedDates: updatedDates, checkedUntil: apod.today});
+        if (newDisabledDates.length > 0) {
+            const updatedDates = [...apod.disabledDates, ...newDisabledDates];
+            const newApod = Object.assign(apod, {disabledDates: updatedDates, checkedUntil: apod.today});
 
             return updateStore(store, {
                 apod: newApod
@@ -95,4 +110,4 @@ const updateApodImage = (date, state) => {
     }
 };
 
-export {apodFormatDate, cacheImage, updateApodBlockedDates, updateApodImage};
+export {apodFormatDate, cacheImage, getApodDisabledDates, updateApodDisabledDates, updateApodImage};

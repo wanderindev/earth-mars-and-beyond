@@ -7,7 +7,7 @@ const store = {
         checkedUntil: '2021-01-19',
         cachedImgs: [],
         currentImg: {},
-        blockedDates: [
+        disabledDates: [
             '2008-07-22',
             '2008-11-25',
             '2010-11-24',
