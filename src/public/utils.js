@@ -8,8 +8,23 @@ import {updateAndRender, updateStore} from "./client.js";
  * @param {Date} date - A Date object
  * @return {string} date - A string representing a date
  */
-const apodFormatDate = (date) => {
+const apodDateToString = (date) => {
     return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+};
+
+
+/**
+ * @description Returns a Date from a string in format YYYY-MM-DD
+ * @param {string} date - A string representing a date
+ * @return {Date} date - A Date object
+ */
+const apodStringToDate = (date) => {
+    date = date !== '' ? date : apodDateToString(new Date());
+    return new Date(
+        parseInt(date.substring(0, 4)),
+        parseInt(date.substring(5, 7)) - 1,
+        parseInt(date.substring(8, 10))
+    );
 };
 
 /**
@@ -21,11 +36,9 @@ const apodFormatDate = (date) => {
  */
 const cacheImage = (date, image, apod) => {
     const newCachedImgs = [...apod.cachedImgs, image];
-    const newApod = Object.assign(apod, {reqDate: date, currentImg: image, cachedImgs: newCachedImgs});
+    const newApod = Object.assign(apod, {cachedImgs: newCachedImgs});
 
-    return updateAndRender(store, {
-        apod: newApod
-    });
+    return updateAndRender(store, {apod: newApod});
 };
 
 /**
@@ -34,13 +47,7 @@ const cacheImage = (date, image, apod) => {
  * @return {array} disabledDates - An array with disabled dates
  */
 const getApodDisabledDates = (apod) => {
-    return apod.disabledDates.map(date => {
-        return new Date(
-            parseInt(date.substring(0, 4)),
-            parseInt(date.substring(5, 7)) - 1,
-            parseInt(date.substring(8, 10))
-        );
-    });
+    return apod.disabledDates.map(date => apodStringToDate(date));
 }
 
 /**
@@ -50,7 +57,7 @@ const getApodDisabledDates = (apod) => {
  */
 const updateApodDisabledDates = (apod) => {
     const startDate = apod.checkedUntil;
-    const endDate = apodFormatDate(new Date());
+    const endDate = apodDateToString(new Date());
 
     getImagesForDateRange(startDate, endDate).then(images => {
         const newDisabledDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
@@ -89,7 +96,7 @@ const updateApodImage = (date, state) => {
                 copyright: image.copyright,
                 url: image.url
             }
-        });
+        })[0];
     // Get the new image from the API
     } else {
         getImageForDate(date).then(images => {
@@ -103,11 +110,13 @@ const updateApodImage = (date, state) => {
                 }
             })[0];
 
-            cacheImage(date, image, state.apod);
+            if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
+                cacheImage(date, image, state.apod);
+            }
 
             return image;
         });
     }
 };
 
-export {apodFormatDate, cacheImage, getApodDisabledDates, updateApodDisabledDates, updateApodImage};
+export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, updateApodDisabledDates, updateApodImage};

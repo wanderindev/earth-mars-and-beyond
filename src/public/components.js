@@ -1,5 +1,6 @@
-import {apodFormatDate, updateApodImage} from './utils.js';
+import {apodDateToString, updateApodImage} from './utils.js';
 import {store} from './store.js';
+import {updateStore} from "./client.js";
 
 
 /**
@@ -89,10 +90,14 @@ const MarsTabContent = (state) => {
  * @return {string} html - The HTML for the BeyondTabContent
  */
 const BeyondTabContent = (state) => {
-    const date = state.apod.reqDate || apodFormatDate(new Date());
+    const date = state.apod.reqDate || apodDateToString(new Date());
     const image = updateApodImage(date, state);
 
     if (image) {
+        const newApod = Object.assign(state.apod, {currentImg: image});
+
+        updateStore(store, {apod: newApod});
+
         return `
             <div class="columns">
                 <div class="column has-text-centered">
@@ -102,7 +107,7 @@ const BeyondTabContent = (state) => {
                     <div class="apod-info">
                         <div class="block">
                             <p class="has-text-weight-semibold">Date:</p>
-                            <input id="apod-calendar" type="date">
+                            <input class="is-info" id="apod-calendar" type="date">
                         </div>  
                         <div class="block">
                             <p class="has-text-weight-semibold">Title:</p>
@@ -114,7 +119,7 @@ const BeyondTabContent = (state) => {
                         </div>
                         <div class="block">
                             <p class="has-text-weight-semibold">Copyright:</p>
-                            ${image.copyright}
+                            ${image.copyright ? image.copyright : ''}
                         </div>                                                                      
                     </div>
                 </div>

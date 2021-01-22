@@ -1,3 +1,4 @@
+import {apodStringToDate, getApodDisabledDates} from './utils.js'
 import {store} from "./store.js";
 import {updateAndRender} from "./client.js";
 
@@ -5,14 +6,25 @@ import {updateAndRender} from "./client.js";
 /**
  * @description Attaches event listeners to various DOM elements.  This function is called in the render() function.
  */
-const setListeners = () => {
+const setListeners = (state) => {
     // Adds event listerners after the page is rendered
     setTimeout(() => {
         // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
-        //const $calendars = bulmaCalendar.attach('[type="date"]', {});
-        //const $apodCalendar = document.querySelector('#apod-calendar');
+        const $apodCalendar = document.querySelector('#apod-calendar');
+        const $calendars = bulmaCalendar.attach('[type="date"]', {
+            type: 'date',
+            lang: 'en',
+            dateFormat: 'YYYY-MM-DD',
+            showHeader: false,
+            showClearButton: false,
+            startDate: apodStringToDate(state.apod.reqDate),
+            //displayMode: 'inline',
+            minDate: new Date(1995, 5, 16),
+            maxDate: new Date(),
+            disabledDates: getApodDisabledDates(state.apod)
+        });
 
         // Adds event listener for navigation burgers
         if ($navbarBurgers.length > 0) {
@@ -37,8 +49,8 @@ const setListeners = () => {
                 });
             });
         }
-/*
-        // Initializes all Bulma calendars
+
+        // Loop on each calendar initialized
         $calendars.forEach(calendar => {
             // Add listener to select event
             calendar.on('select', date => {
@@ -46,13 +58,16 @@ const setListeners = () => {
             });
         });
 
-        // Accesses the APOD calendar
+        // Accesses the APOD calendar and adds a select event listener
         if ($apodCalendar) {
             $apodCalendar.bulmaCalendar.on('select', datepicker => {
-                console.log(datepicker.data.value());
+                const selectedDate = datepicker.data.value();
+                const newApod = Object.assign(state.apod, {reqDate: selectedDate});
+
+                return updateAndRender(store, {apod: newApod});
             });
         }
-*/
+
     }, 1000);
 };
 
