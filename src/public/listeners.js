@@ -12,6 +12,7 @@ const setListeners = (state) => {
         // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
+        // const $beyond = document.getElementById('beyond');
         const $apodCalendar = document.querySelector('#apod-calendar');
         const $calendars = bulmaCalendar.attach('[type="date"]', {
             type: 'date',
@@ -54,7 +55,7 @@ const setListeners = (state) => {
         $calendars.forEach(calendar => {
             // Add listener to select event
             calendar.on('select', date => {
-                console.log(date);
+                // console.log(date);
             });
         });
 

@@ -60,9 +60,7 @@ const TabPanel = (state) => {
         <div id="mars" class="tab-content ${active === 'mars' ? 'is-active' : ''}">
             ${active === 'mars' ? MarsTabContent(store) : ''}
         </div>
-        <div id="beyond" class="tab-content ${active === 'beyond' ? 'is-active' : ''}">
-            ${active === 'beyond' ? BeyondTabContent(store) : ''}
-        </div>
+        ${active === 'beyond' ? BeyondTabContent(store) : ''}
     `
 };
 
@@ -99,32 +97,43 @@ const BeyondTabContent = (state) => {
         updateStore(store, {apod: newApod});
 
         return `
-            <div class="columns">
-                <div class="column has-text-centered">
-                    <img class="apod-img" src="${image.url}" alt="Astronomy picture of the day for ${image.date}" />
-                </div>
-                <div class="column is-narrow">
-                    <div class="apod-info">
-                        <div class="block">
-                            <p class="has-text-weight-semibold">Date:</p>
-                            <input class="is-info" id="apod-calendar" type="date">
-                        </div>  
-                        <div class="block">
-                            <p class="has-text-weight-semibold">Title:</p>
-                            ${image.title}
+            <div id="beyond" class="tab-content ${state.tabs.active === 'beyond' ? 'is-active' : ''}">
+                <div class="columns">
+                    <div class="column has-text-centered">
+                    <div class="apod-img-wrapper">
+                        <img class="apod-img" src="${image.url}" alt="" />
+                    </div>
+                    </div>
+                    <div class="column is-narrow">
+                        <div class="apod-info">
+                            <div class="block">
+                                <p class="has-text-weight-semibold">Date:</p>
+                                <input class="is-info is-hidden" id="apod-calendar" type="date">
+                            </div>  
+                            <div class="block">
+                                <p class="has-text-weight-semibold">Title:</p>
+                                ${image.title}
+                            </div>
+                            <div class="block has-text-justified">
+                                <p class="has-text-weight-semibold">Image Details:</p>
+                                ${image.explanation}
+                            </div>
+                            <div class="block ${image.copyright ? '' : 'is-hidden'}">
+                                <p class="has-text-weight-semibold">Copyright:</p>
+                                ${image.copyright ? image.copyright : ''}
+                            </div>                                                                      
                         </div>
-                        <div class="block has-text-justified">
-                            <p class="has-text-weight-semibold">Image Details:</p>
-                            ${image.explanation}
-                        </div>
-                        <div class="block">
-                            <p class="has-text-weight-semibold">Copyright:</p>
-                            ${image.copyright ? image.copyright : ''}
-                        </div>                                                                      
                     </div>
                 </div>
             </div>
+            <style>
+                .apod-img-wrapper:after {
+                    padding-bottom: ${image.aspectRatio}%;
+                }            
+            </style>
         `
+    } else {
+        return ``;
     }
 };
 

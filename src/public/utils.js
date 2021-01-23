@@ -36,7 +36,7 @@ const apodStringToDate = (date) => {
  */
 const cacheImage = (date, image, apod) => {
     const newCachedImgs = [...apod.cachedImgs, image];
-    const newApod = Object.assign(apod, {cachedImgs: newCachedImgs});
+    const newApod = Object.assign(apod, {cachedImgs: newCachedImgs, currentImg: image});
 
     return updateAndRender(store, {apod: newApod});
 };
@@ -48,6 +48,25 @@ const cacheImage = (date, image, apod) => {
  */
 const getApodDisabledDates = (apod) => {
     return apod.disabledDates.map(date => apodStringToDate(date));
+}
+
+const getImageAspectRatio = (date, image, state) => {
+    const img = new Image();
+
+    img.onload = () => {
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        const aspectRatio = height / width * 100;
+        const newImage = Object.assign(image, {aspectRatio: aspectRatio});
+
+        if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
+            cacheImage(date, newImage, state.apod);
+        }
+
+        return aspectRatio;
+    }
+
+    img.src = image.url;
 }
 
 /**
@@ -71,7 +90,6 @@ const updateApodDisabledDates = (apod) => {
             });
         }
     });
-
 };
 
 /**
@@ -101,18 +119,20 @@ const updateApodImage = (date, state) => {
     } else {
         getImageForDate(date).then(images => {
             const image = images.map(image => {
+                getImageAspectRatio(date, image, state);
                 return {
                     date: image.date,
                     title: image.title,
                     explanation: image.explanation,
                     copyright: image.copyright,
-                    url: image.url
+                    url: image.url,
+                    aspectRatio: ''
                 }
             })[0];
 
-            if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
+            /*if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
                 cacheImage(date, image, state.apod);
-            }
+            }*/
 
             return image;
         });

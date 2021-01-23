@@ -41,6 +41,7 @@ const render = async (root, state) => {
  * @return {string} html - The HTML for the entire page
  */
 const App = (state) => {
+    console.log(state);
     return `
         <header></header>
         <main>
