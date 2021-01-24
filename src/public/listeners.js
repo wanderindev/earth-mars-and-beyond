@@ -20,7 +20,7 @@ const setListeners = (state) => {
             dateFormat: 'YYYY-MM-DD',
             showHeader: false,
             showClearButton: false,
-            // startDate: apodStringToDate(state.apod.reqDate),
+            startDate: apodStringToDate(state.apod.reqDate),
             displayMode: 'inline',
             minDate: new Date(1995, 5, 16),
             maxDate: new Date(),
@@ -63,7 +63,7 @@ const setListeners = (state) => {
         if ($apodCalendar) {
             $apodCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
                 const selectedDate = datepicker.data.value();
-
+                console.log(selectedDate);
                 if (selectedDate !== state.apod.reqDate) {
                     const newApod = Object.assign(state.apod, {reqDate: selectedDate});
                     return updateAndRender(store, {apod: newApod});
