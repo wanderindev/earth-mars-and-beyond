@@ -61,7 +61,7 @@ const setListeners = (state) => {
 
         // Accesses the APOD calendar and adds a select event listener
         if ($apodCalendar) {
-            $apodCalendar.bulmaCalendar.on('select', datepicker => {
+            $apodCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
                 const selectedDate = datepicker.data.value();
 
                 if (selectedDate !== state.apod.reqDate) {

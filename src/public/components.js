@@ -80,7 +80,7 @@ const BeyondPage = (state) => {
         const newApod = Object.assign(state.apod, {currentImg: image});
 
         updateStore(store, {apod: newApod});
-
+        console.log(image);
         return `
             <div id="beyond" class="${state.menu.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
