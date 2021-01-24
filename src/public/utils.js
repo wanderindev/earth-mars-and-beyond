@@ -24,12 +24,11 @@ const apodStringToDate = (date) => {
 
 /**
  * @description Returns a string representing a date in format YYYY-MM-DD
- * @param {string} date - A string representing a date in format YYYY-MM-DD
  * @param {object} image - An object representing an image
  * @param {object} apod - An object with information for the APOD API
  * @return {object} store - The updated store object
  */
-const cacheImage = (date, image, apod) => {
+const cacheImage = (image, apod) => {
     const newCachedImgs = [...apod.cachedImgs, image];
     const newApod = Object.assign(apod, {cachedImgs: newCachedImgs, currentImg: image});
 
@@ -57,7 +56,7 @@ const getDateWithTimeString = (date) => {
     if (timeZoneOffset > 0) {
         return date + 'T' + String(timeZoneOffset).padStart(2, '0') + ':00:00';
     } else if (timeZoneOffset < 0) {
-        return date.substring(0,8) + String(parseInt(date.substring(8,10)) - 1).padStart(2, 0) + 'T' + String(24 + timeZoneOffset).padStart(2, '0') + ':00:00';
+        return date.substring(0,8) + String(parseInt(date.substring(8,10)) - 1).padStart(2, '0') + 'T' + String(24 + timeZoneOffset).padStart(2, '0') + ':00:00';
     } else {
         return date + 'T00:00:00'
     }
@@ -65,12 +64,11 @@ const getDateWithTimeString = (date) => {
 
 /**
  * @description Returns the aspect ratio for the image
- * @param {string} date - A string representing a date
  * @param {object} image - An object representing and APOD image
  * @param {object} state - The application state
  * @return {float} aspectRatio - The image aspect ratio
  */
-const getImageAspectRatio = (date, image, state) => {
+const getImageAspectRatio = (image, state) => {
     const img = new Image();
 
     img.onload = () => {
@@ -79,8 +77,8 @@ const getImageAspectRatio = (date, image, state) => {
         const aspectRatio = height / width * 100;
         const newImage = Object.assign(image, {aspectRatio: aspectRatio});
 
-        if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
-            cacheImage(date, newImage, state.apod);
+        if (!state.apod.cachedImgs.map(image => image.date).includes(image.date)) {
+            cacheImage(newImage, state.apod);
         }
 
         return aspectRatio;
@@ -100,7 +98,7 @@ const updateApodDisabledDates = (apod) => {
 
     if (startDate !== endDate) {
         getImagesForDateRange(startDate, endDate).then(images => {
-            const newDisabledDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
+            const newDisabledDates = images.filter(image => image['media_type'] !== 'image').map(image => image.date);
 
             if (newDisabledDates.length > 0) {
                 const updatedDates = [...apod.disabledDates, ...newDisabledDates];
@@ -125,32 +123,24 @@ const updateApodImage = (date, state) => {
 
     // The requested image is the current image.
     if (state.apod.currentImg && state.apod.currentImg.date === date) {
+        //console.log('currentImg', state.apod.currentImg);
         return state.apod.currentImg;
     // The requested image is in the cache.
     } else if (cachedImgsDates.includes(date)) {
-        return state.apod.cachedImgs.filter(image => image.date === date).map(image => {
+        //console.log('cache', state.apod.cachedImgs.filter(image => image.date === date)[0]);
+        return state.apod.cachedImgs.filter(image => image.date === date)[0];
+    // Get the new image from the API
+    } else {
+        getImageForDate(date).then(image => {
+            getImageAspectRatio(image, state);
             return {
                 date: image.date,
                 title: image.title,
                 explanation: image.explanation,
                 copyright: image.copyright,
-                url: image.url
+                url: image.url,
+                aspectRatio: ''
             }
-        })[0];
-    // Get the new image from the API
-    } else {
-        getImageForDate(date).then(images => {
-            return images.map(image => {
-                getImageAspectRatio(date, image, state);
-                return {
-                    date: image.date,
-                    title: image.title,
-                    explanation: image.explanation,
-                    copyright: image.copyright,
-                    url: image.url,
-                    aspectRatio: ''
-                }
-            })[0];
         });
     }
 };

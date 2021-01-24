@@ -16,6 +16,7 @@ const setListeners = (state) => {
         const $calendars = bulmaCalendar.attach('[type="date"]', {
             type: 'date',
             color: 'black',
+            isRange: false,
             lang: 'en',
             dateFormat: 'YYYY-MM-DD',
             showHeader: false,
@@ -63,7 +64,7 @@ const setListeners = (state) => {
         if ($apodCalendar) {
             $apodCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
                 const selectedDate = datepicker.data.value();
-                console.log(selectedDate);
+
                 if (selectedDate !== state.apod.reqDate) {
                     const newApod = Object.assign(state.apod, {reqDate: selectedDate});
                     return updateAndRender(store, {apod: newApod});

@@ -21,7 +21,6 @@ const NavBar = (state) => {
                 <span aria-hidden="true"></span>
             </a>
         </div>
-
         <div id="mainMenu" class="navbar-menu">
             <div class="navbar-end">  
                 <a class="navbar-item menu-item earth ${active === 'earth' ? 'is-active' : ''}" data-target="earth">Earth</a>  
@@ -42,10 +41,10 @@ const PageContent = (state) => {
     const active = state.menu.active;
 
     return `
-        ${active === 'earth' ? EarthPage(store) : ''}
-        ${active === 'mars' ? MarsPage(store) : ''}
-        ${active === 'beyond' ? BeyondPage(store) : ''}
-        ${active === 'about' ? AboutPage(store) : ''}
+        ${active === 'earth' ? EarthPage(state) : ''}
+        ${active === 'mars' ? MarsPage(state) : ''}
+        ${active === 'beyond' ? BeyondPage(state) : ''}
+        ${active === 'about' ? AboutPage(state) : ''}
     `
 };
 
@@ -77,10 +76,6 @@ const BeyondPage = (state) => {
     const image = updateApodImage(date, state);
 
     if (image) {
-        const newApod = Object.assign(state.apod, {currentImg: image});
-
-        updateStore(store, {apod: newApod});
-
         return `
             <div id="beyond" class="${state.menu.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
@@ -97,8 +92,7 @@ const BeyondPage = (state) => {
                     <div class="column is-narrow">
                         <div class="apod-info">
                             <div class="block">
-                                <input class="input is-hidden" id="apod-calendar" type="date" 
-                                       value="${getDateWithTimeString(image.date)}">
+                                <input class="input is-hidden" id="apod-calendar" type="date">
                             </div>                                                                
                         </div>
                     </div>

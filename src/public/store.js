@@ -4,7 +4,7 @@ const store = {
     },
     apod: {
         reqDate: '',
-        checkedUntil: '2021-01-19',
+        checkedUntil: '2021-01-23',
         cachedImgs: [],
         currentImg: {},
         disabledDates: [
