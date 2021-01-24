@@ -12,16 +12,16 @@ const setListeners = (state) => {
         // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
-        // const $beyond = document.getElementById('beyond');
         const $apodCalendar = document.querySelector('#apod-calendar');
         const $calendars = bulmaCalendar.attach('[type="date"]', {
             type: 'date',
+            color: 'info',
             lang: 'en',
             dateFormat: 'YYYY-MM-DD',
             showHeader: false,
             showClearButton: false,
-            startDate: apodStringToDate(state.apod.reqDate),
-            //displayMode: 'inline',
+            // startDate: apodStringToDate(state.apod.reqDate),
+            // displayMode: 'inline',
             minDate: new Date(1995, 5, 16),
             maxDate: new Date(),
             disabledDates: getApodDisabledDates(state.apod)
@@ -55,7 +55,7 @@ const setListeners = (state) => {
         $calendars.forEach(calendar => {
             // Add listener to select event
             calendar.on('select', date => {
-                // console.log(date);
+                //console.log(date);
             });
         });
 
@@ -63,9 +63,11 @@ const setListeners = (state) => {
         if ($apodCalendar) {
             $apodCalendar.bulmaCalendar.on('select', datepicker => {
                 const selectedDate = datepicker.data.value();
-                const newApod = Object.assign(state.apod, {reqDate: selectedDate});
 
-                return updateAndRender(store, {apod: newApod});
+                if (selectedDate !== state.apod.reqDate) {
+                    const newApod = Object.assign(state.apod, {reqDate: selectedDate});
+                    return updateAndRender(store, {apod: newApod});
+                }
             });
         }
 

@@ -1,4 +1,4 @@
-import {apodDateToString, updateApodImage} from './utils.js';
+import {apodDateToString, getDateWithTimeString, updateApodImage} from './utils.js';
 import {store} from './store.js';
 import {updateStore} from "./client.js";
 
@@ -100,6 +100,11 @@ const BeyondTabContent = (state) => {
             <div id="beyond" class="tab-content ${state.tabs.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
                     <div class="column has-text-centered">
+                        <h1 class="title is-1">${image.title}<span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column has-text-centered">
                     <div class="apod-img-wrapper">
                         <img class="apod-img" src="${image.url}" alt="" />
                     </div>
@@ -107,21 +112,12 @@ const BeyondTabContent = (state) => {
                     <div class="column is-narrow">
                         <div class="apod-info">
                             <div class="block">
-                                <p class="has-text-weight-semibold">Date:</p>
-                                <input class="is-info is-hidden" id="apod-calendar" type="date">
+                                <input class="input is-hidden" id="apod-calendar" type="date" 
+                                       value="${getDateWithTimeString(image.date)}">
                             </div>  
-                            <div class="block">
-                                <p class="has-text-weight-semibold">Title:</p>
-                                ${image.title}
-                            </div>
                             <div class="block has-text-justified">
-                                <p class="has-text-weight-semibold">Image Details:</p>
                                 ${image.explanation}
-                            </div>
-                            <div class="block ${image.copyright ? '' : 'is-hidden'}">
-                                <p class="has-text-weight-semibold">Copyright:</p>
-                                ${image.copyright ? image.copyright : ''}
-                            </div>                                                                      
+                            </div>                                                                 
                         </div>
                     </div>
                 </div>

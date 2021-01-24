@@ -19,12 +19,7 @@ const apodDateToString = (date) => {
  * @return {Date} date - A Date object
  */
 const apodStringToDate = (date) => {
-    date = date !== '' ? date : apodDateToString(new Date());
-    return new Date(
-        parseInt(date.substring(0, 4)),
-        parseInt(date.substring(5, 7)) - 1,
-        parseInt(date.substring(8, 10))
-    );
+    return new Date(getDateWithTimeString(date !== '' ? date : apodDateToString(new Date())));
 };
 
 /**
@@ -50,6 +45,31 @@ const getApodDisabledDates = (apod) => {
     return apod.disabledDates.map(date => apodStringToDate(date));
 }
 
+
+/**
+ * @description Returns a string representing a date with time information
+ * @param {string} date - A string representing a date
+ * @return {string} dateString - A string representing a date with time information
+ */
+const getDateWithTimeString = (date) => {
+    const timeZoneOffset = new Date().getTimezoneOffset() / 60;
+
+    if (timeZoneOffset > 0) {
+        return date + 'T' + String(timeZoneOffset).padStart(2, '0') + ':00:00';
+    } else if (timeZoneOffset < 0) {
+        return date.substring(0,8) + String(parseInt(date.substring(8,10)) - 1).padStart(2, 0) + 'T' + String(24 + timeZoneOffset).padStart(2, '0') + ':00:00';
+    } else {
+        return date + 'T00:00:00'
+    }
+}
+
+/**
+ * @description Returns the aspect ratio for the image
+ * @param {string} date - A string representing a date
+ * @param {object} image - An object representing and APOD image
+ * @param {object} state - The application state
+ * @return {float} aspectRatio - The image aspect ratio
+ */
 const getImageAspectRatio = (date, image, state) => {
     const img = new Image();
 
@@ -78,18 +98,20 @@ const updateApodDisabledDates = (apod) => {
     const startDate = apod.checkedUntil;
     const endDate = apodDateToString(new Date());
 
-    getImagesForDateRange(startDate, endDate).then(images => {
-        const newDisabledDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
+    if (startDate !== endDate) {
+        getImagesForDateRange(startDate, endDate).then(images => {
+            const newDisabledDates = images.filter(image => image.media_type !== 'image').map(image => image.date);
 
-        if (newDisabledDates.length > 0) {
-            const updatedDates = [...apod.disabledDates, ...newDisabledDates];
-            const newApod = Object.assign(apod, {disabledDates: updatedDates, checkedUntil: apod.today});
+            if (newDisabledDates.length > 0) {
+                const updatedDates = [...apod.disabledDates, ...newDisabledDates];
+                const newApod = Object.assign(apod, {disabledDates: updatedDates, checkedUntil: endDate});
 
-            return updateStore(store, {
-                apod: newApod
-            });
-        }
-    });
+                return updateStore(store, {
+                    apod: newApod
+                });
+            }
+        });
+    }
 };
 
 /**
@@ -118,7 +140,7 @@ const updateApodImage = (date, state) => {
     // Get the new image from the API
     } else {
         getImageForDate(date).then(images => {
-            const image = images.map(image => {
+            return images.map(image => {
                 getImageAspectRatio(date, image, state);
                 return {
                     date: image.date,
@@ -129,14 +151,8 @@ const updateApodImage = (date, state) => {
                     aspectRatio: ''
                 }
             })[0];
-
-            /*if (!state.apod.cachedImgs.map(image => image.date).includes(date)) {
-                cacheImage(date, image, state.apod);
-            }*/
-
-            return image;
         });
     }
 };
 
-export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, updateApodDisabledDates, updateApodImage};
+export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage};
