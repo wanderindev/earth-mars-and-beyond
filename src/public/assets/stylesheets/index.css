@@ -94,10 +94,10 @@ main {
     margin-left: 22px;
 }
 
-.apod-info {
+.apod-exp {
     width: 100%;
-    margin: 0 32px;
-    font-size: 0.95rem;
+    text-indent: 40px;
+    line-height: 2;
 }
 
 .apod-img-wrapper {
@@ -115,7 +115,6 @@ main {
     top: 0;
     width: 100%;
     height: 100%;
-    margin: 0 32px;
     border-radius: 8px;
 }
 
@@ -142,20 +141,20 @@ footer a:hover {
 
 @media (min-width: 769px) {
     .apod-info {
-        width: 300px;
+        /*width: 300px;*/
     }
 
 }
 
 @media (min-width: 1024px) {
     .apod-info {
-        width: 350px;
+        /*width: 350px;*/
     }
 }
 
 @media (min-width: 1216px) {
     .apod-info {
-        width: 400px;
+        /*width: 400px;*/
     }
 }
 

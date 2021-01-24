@@ -90,19 +90,23 @@ const BeyondPage = (state) => {
                 </div>
                 <div class="columns">
                     <div class="column has-text-centered">
-                    <div class="apod-img-wrapper">
-                        <img class="apod-img" src="${image.url}" alt="" />
-                    </div>
+                        <div class="apod-img-wrapper">
+                            <img class="apod-img" src="${image.url}" alt="" />
+                        </div>
                     </div>
                     <div class="column is-narrow">
                         <div class="apod-info">
                             <div class="block">
                                 <input class="input is-hidden" id="apod-calendar" type="date" 
                                        value="${getDateWithTimeString(image.date)}">
-                            </div>  
-                            <div class="block has-text-justified">
-                                ${image.explanation}
-                            </div>                                                                 
+                            </div>                                                                
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="block apod-exp has-text-justified">
+                            ${image.explanation}
                         </div>
                     </div>
                 </div>

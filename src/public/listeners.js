@@ -15,7 +15,7 @@ const setListeners = (state) => {
         const $apodCalendar = document.querySelector('#apod-calendar');
         const $calendars = bulmaCalendar.attach('[type="date"]', {
             type: 'date',
-            color: 'info',
+            color: 'black',
             lang: 'en',
             dateFormat: 'YYYY-MM-DD',
             showHeader: false,
