@@ -23,7 +23,8 @@ textarea {
 }
 
 .title,
-.subtitle {
+.subtitle,
+.menu-item {
     font-family: "IBM Plex Sans", sans-serif !important;
 }
 
@@ -45,29 +46,52 @@ main {
 
 .navbar {
     margin-bottom: 36px;
+    border-bottom: 1px solid #999;
 }
 
-.tabs li a:hover {
+.navbar-menu {
+    margin-right: 40px;
+}
+
+.navbar-item img {
+    max-height: none;
+}
+
+.navbar .menu-item:hover {
     cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    font-weight: 500;
 }
 
-.tabs li.is-active a {
+.navbar .menu-item.is-active {
     cursor: default;
     color: #000;
     font-weight: 500;
 }
 
-.tab-content {
-    display: none;
-    margin: 32px 0;
+.navbar .menu-item.earth {
+    width: 68px;
 }
 
-.tab-content.is-active {
-    display: block;
+.navbar .menu-item.mars {
+    width: 64px;
+}
+
+.navbar .menu-item.beyond {
+    width: 137px;
+}
+
+.navbar .menu-item.about {
+    width: 73px;
 }
 
 #beyond .title {
     margin: 24px 0 32px;
+}
+
+#beyond .subtitle {
+    margin-left: 22px;
 }
 
 .apod-info {
@@ -93,14 +117,6 @@ main {
     height: 100%;
     margin: 0 32px;
     border-radius: 8px;
-}
-
-.apod-img {
-    /*max-width: 100%;
-    //width: 600px;
-    //height: auto;
-    //padding-right: 16px;
-    //padding-left: 16px;*/
 }
 
 footer {

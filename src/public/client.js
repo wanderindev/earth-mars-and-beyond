@@ -1,4 +1,4 @@
-import {Footer, NavBar, TabPanel} from './components.js';
+import {Footer, NavBar, PageContent} from './components.js';
 import {setListeners} from "./listeners.js";
 import {store} from './store.js';
 import {updateApodDisabledDates} from "./utils.js";
@@ -44,8 +44,8 @@ const App = (state) => {
     return `
         <header></header>
         <main>
-            <nav class="navbar" role="navigation" aria-label="main navigation">${NavBar()}</nav>
-            <div>${TabPanel(state)}</div>
+            <nav class="navbar" role="navigation" aria-label="main navigation">${NavBar(state)}</nav>
+            <div>${PageContent(state)}</div>
         </main>
         <footer class="footer">${Footer()}</footer>
     `

@@ -1,6 +1,6 @@
 const store = {
-    tabs: {
-        active: 'earth'
+    menu: {
+        active: 'about'
     },
     apod: {
         reqDate: '',

@@ -11,7 +11,7 @@ const setListeners = (state) => {
     setTimeout(() => {
         // Gets reference to DOM elements for event listeners
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-        const $tabItems = Array.prototype.slice.call(document.querySelectorAll('.tab-item'), 0);
+        const $menuItems = Array.prototype.slice.call(document.querySelectorAll('.menu-item'), 0);
         const $apodCalendar = document.querySelector('#apod-calendar');
         const $calendars = bulmaCalendar.attach('[type="date"]', {
             type: 'date',
@@ -21,7 +21,7 @@ const setListeners = (state) => {
             showHeader: false,
             showClearButton: false,
             // startDate: apodStringToDate(state.apod.reqDate),
-            // displayMode: 'inline',
+            displayMode: 'inline',
             minDate: new Date(1995, 5, 16),
             maxDate: new Date(),
             disabledDates: getApodDisabledDates(state.apod)
@@ -41,12 +41,12 @@ const setListeners = (state) => {
         }
 
         // Adds event listener for tabs
-        if ($tabItems.length > 0) {
-            $tabItems.forEach(el => {
+        if ($menuItems.length > 0) {
+            $menuItems.forEach(el => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
 
-                    updateAndRender(store, {tabs: {active: target}});
+                    updateAndRender(store, {menu: {active: target}});
                 });
             });
         }

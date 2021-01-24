@@ -7,12 +7,12 @@ import {updateStore} from "./client.js";
  * @description Returns the NavBar component
  * @return {string} html - The HTML for the NavBar
  */
-const NavBar = () => {
+const NavBar = (state) => {
+    const active = state.menu.active;
     return `
         <div class="navbar-brand">
             <a class="navbar-item has-text-black is-uppercase has-text-weight-semibold" href="#">
-                <img src="" alt="" width="112" height="28">
-                Earth, Mars, and Beyond
+                <img src="./assets/images/logo.png" alt="" width="463" height="150">
             </a>
             
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
@@ -23,71 +23,56 @@ const NavBar = () => {
         </div>
 
         <div id="mainMenu" class="navbar-menu">
-            <div class="navbar-end">    
-                <a class="navbar-item">Explore</a>
-                <a class="navbar-item">About</a>
-                <a class="navbar-item">Contact</a>
+            <div class="navbar-end">  
+                <a class="navbar-item menu-item earth ${active === 'earth' ? 'is-active' : ''}" data-target="earth">Earth</a>  
+                <a class="navbar-item menu-item mars ${active === 'mars' ? 'is-active' : ''}" data-target="mars">Mars</a>
+                <a class="navbar-item menu-item beyond ${active === 'beyond' ? 'is-active' : ''}" data-target="beyond">And Beyond...</a>
+                <a class="navbar-item menu-item about ${active === 'about' ? 'is-active' : ''}" data-target="about">About</a>
             </div>
         </div>
     `
 };
 
 /**
- * @description Returns the TabPanel component
+ * @description Returns the PageContent component
  * @param {object} state - The application's state
- * @return {string} html - The HTML for the TabPanel
+ * @return {string} html - The HTML for the PageContent
  */
-const TabPanel = (state) => {
-    const active = state.tabs.active;
+const PageContent = (state) => {
+    const active = state.menu.active;
 
     return `
-        <div class="tabs is-boxed is-centered">
-            <ul>
-                <li class="tab-item ${active === 'earth' ? 'is-active' : ''}" data-target="earth">
-                    <a>Earth</a>
-                </li>
-                <li class="tab-item ${active === 'mars' ? 'is-active' : ''}" data-target="mars">
-                    <a>Mars</a>
-                </li>
-                <li class="tab-item ${active === 'beyond' ? 'is-active' : ''}" data-target="beyond">
-                    <a>And Beyond...</a>
-                </li>
-            </ul>
-        </div>
-        <div id="earth" class="tab-content ${active === 'earth' ? 'is-active' : ''}">
-            ${active === 'earth' ? EarthTabContent(store) : ''}
-        </div>
-        <div id="mars" class="tab-content ${active === 'mars' ? 'is-active' : ''}">
-            ${active === 'mars' ? MarsTabContent(store) : ''}
-        </div>
-        ${active === 'beyond' ? BeyondTabContent(store) : ''}
+        ${active === 'earth' ? EarthPage(store) : ''}
+        ${active === 'mars' ? MarsPage(store) : ''}
+        ${active === 'beyond' ? BeyondPage(store) : ''}
+        ${active === 'about' ? AboutPage(store) : ''}
     `
 };
 
 /**
- * @description Returns the EarthTabContent component
+ * @description Returns the EarthPage component
  * @param {object} state - The application's state
- * @return {string} html - The HTML for the EarthTabContent
+ * @return {string} html - The HTML for the EarthPage
  */
-const EarthTabContent = (state) => {
-    return `${state}`;
+const EarthPage = (state) => {
+    return ``;
 };
 
 /**
- * @description Returns the MarsTabContent component
+ * @description Returns the MarsPage component
  * @param {object} state - The application's state
- * @return {string} html - The HTML for the MarsTabContent
+ * @return {string} html - The HTML for the MarsPage
  */
-const MarsTabContent = (state) => {
-    return `${state}`;
+const MarsPage = (state) => {
+    return ``;
 };
 
 /**
- * @description Returns the BeyondTabContent component
+ * @description Returns the BeyondPage component
  * @param {object} state - The application's state
- * @return {string} html - The HTML for the BeyondTabContent
+ * @return {string} html - The HTML for the BeyondPage
  */
-const BeyondTabContent = (state) => {
+const BeyondPage = (state) => {
     const date = state.apod.reqDate || apodDateToString(new Date());
     const image = updateApodImage(date, state);
 
@@ -97,7 +82,7 @@ const BeyondTabContent = (state) => {
         updateStore(store, {apod: newApod});
 
         return `
-            <div id="beyond" class="tab-content ${state.tabs.active === 'beyond' ? 'is-active' : ''}">
+            <div id="beyond" class="${state.menu.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
                     <div class="column has-text-centered">
                         <h1 class="title is-1">${image.title}<span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
@@ -134,6 +119,15 @@ const BeyondTabContent = (state) => {
 };
 
 /**
+ * @description Returns the AboutPage component
+ * @param {object} state - The application's state
+ * @return {string} html - The HTML for the AboutPage
+ */
+const AboutPage = (state) => {
+    return ``;
+};
+
+/**
  * @description Returns the Footer component
  * @return {string} html - The HTML for the Footer
  */
@@ -155,4 +149,4 @@ const Footer = () => {
     `
 };
 
-export {NavBar, TabPanel, Footer};
+export {NavBar, PageContent, Footer};
