@@ -118,25 +118,29 @@ main {
     border-radius: 8px;
 }
 
-footer {
-  margin-top: 48px;
+.footer {
+    margin-top: 48px;
+    background-color: #02016A !important;
+    color: #fff;
+    padding-bottom: 3rem;
 }
 
-footer p {
+.footer p {
     display: inline-block;
     line-height: 26px;
 }
 
-footer p .icon {
+.footer p .icon {
     vertical-align: -3px;
 }
 
-footer a {
+.footer a {
     margin: auto 8px;
+    color: #fff;
 }
 
-footer a:hover {
-    color: #0d56d7
+.footer a:hover {
+    color: #ddd
 }
 
 @media (min-width: 769px) {
