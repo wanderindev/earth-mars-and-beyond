@@ -1,7 +1,4 @@
-import {apodDateToString, getDateWithTimeString, updateApodImage} from './utils.js';
-import {store} from './store.js';
-import {updateStore} from "./client.js";
-
+import {apodDateToString, updateApodImage, updateEpicImages} from './utils.js';
 
 /**
  * @description Returns the NavBar component
@@ -54,7 +51,51 @@ const PageContent = (state) => {
  * @return {string} html - The HTML for the EarthPage
  */
 const EarthPage = (state) => {
-    return ``;
+    if (!state.epic.date) {
+        updateEpicImages(state);
+        return ``;
+    } else {
+        const slides = state.epic.images.map((image, index) => {
+            return '<div><img src="' + image.url + '" width="90%" /></div>';
+        }).reduce((acc, slide) => acc + slide);
+
+        return `
+            <div id="earth" class="${state.menu.active === 'earth' ? 'is-active' : ''}">
+                <div class="columns">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1">Planet Earth <span class="subtitle is-4">on ${state.epic.date}</span></h1>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-half-tablet is-offset-one-quarter-tablet has-text-centered">
+                        <div id="epic-carousel" class="glider-contain">
+                            <div class="glider">
+                                ${slides}
+                            </div>
+                            <button aria-label="Previous" class="glider-prev">«</button>
+                            <button aria-label="Next" class="glider-next">»</button>
+                            <div role="tablist" class="dots"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="block epic-exp has-text-justified">
+                            <p><strong>The Deep Space Climate Observatory (DSCOVR)</strong> is an NOAA space weather, 
+                            space climate, and Earth observation satellite.  SpaceX launched it on <strong>February 11, 
+                            2015</strong>, from Cape Canaveral, and became NOAA's first operational deep-space 
+                            satellite.  DSCOVR is Earth's primary warning system in the event of solar magnetic 
+                            storms.</p>
+                            <p>Onboard the satellite, there's the <strong>Earth Polychromatic Imaging Camera 
+                            (EPIC)</strong>, which takes images of Earth's sunlit side for monitoring purposes. EPIC 
+                            took the pictures on this page on <strong>${state.epic.date}</strong>, from a distance 
+                            of roughly one million miles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 };
 
 /**
@@ -80,7 +121,7 @@ const BeyondPage = (state) => {
             <div id="beyond" class="${state.menu.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
                     <div class="column has-text-centered">
-                        <h1 class="title is-1">${image.title}<span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
+                        <h1 class="title is-1">${image.title}<br><span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
                     </div>
                 </div>
                 <div class="columns">

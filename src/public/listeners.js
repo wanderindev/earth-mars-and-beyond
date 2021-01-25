@@ -27,6 +27,7 @@ const setListeners = (state) => {
             maxDate: new Date(),
             disabledDates: getApodDisabledDates(state.apod)
         });
+        const $epicCarousel = document.querySelector('#epic-carousel');
 
         // Adds event listener for navigation burgers
         if ($navbarBurgers.length > 0) {
@@ -72,7 +73,20 @@ const setListeners = (state) => {
             });
         }
 
-    }, 1000);
+        if ($epicCarousel) {
+            const glider = new Glider(document.querySelector('.glider'), {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                dots: '.dots',
+                arrows: {
+                    prev: '.glider-prev',
+                    next: '.glider-next'
+                }
+            });
+        }
+
+
+    }, 2000);
 };
 
 export {setListeners};

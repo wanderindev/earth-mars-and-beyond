@@ -290,6 +290,10 @@ const store = {
             '2021-01-11'
         ]
     },
+    epic: {
+        date: '',
+        images: []
+    },
     rovers: ['Curiosity', 'Opportunity', 'Spirit']
 };
 

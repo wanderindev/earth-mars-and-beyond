@@ -8,6 +8,7 @@ const app = express();
 const port = 3000;
 
 const apodEndpoint = 'https://api.nasa.gov/planetary/apod?api_key=' + process.env.API_KEY;
+const epicEndpointLatest = 'https://epic.gsfc.nasa.gov/api/natural';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -19,9 +20,8 @@ app.get('/apod/get_image', async (req, res) => {
     const {date} = req.query;
 
     try {
-        let image = await fetch(`${apodEndpoint}&start_date=${date}`)
+        let image = await fetch(`${apodEndpoint}&date=${date}`)
             .then(res => res.json())
-
         res.send(image)
     } catch (err) {
         console.log('error:', err);
@@ -35,8 +35,18 @@ app.get('/apod/get_images', async (req, res) => {
     try {
         let images = await fetch(`${apodEndpoint}&start_date=${start_date}&end_date=${end_date}`)
             .then(res => res.json())
-
         res.send(images);
+    } catch (err) {
+        console.log('error:', err);
+    }
+});
+
+// Connects to NASA's EPIC API and retrieves the latest available date's information
+app.get('/epic/get_latest', async (req, res) => {
+    try {
+        let images = await fetch(`${epicEndpointLatest}`)
+            .then(res => res.json())
+        res.send(images)
     } catch (err) {
         console.log('error:', err);
     }

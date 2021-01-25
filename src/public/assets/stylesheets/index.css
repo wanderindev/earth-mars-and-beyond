@@ -94,7 +94,8 @@ main {
     margin-left: 22px;
 }
 
-.apod-exp {
+.apod-exp,
+.epic-exp {
     width: 100%;
     text-indent: 40px;
     line-height: 2;

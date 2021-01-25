@@ -1,4 +1,4 @@
-import {getImageForDate, getImagesForDateRange} from './api-calls.js';
+import {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages} from './api-calls.js';
 import {store} from "./store.js";
 import {updateAndRender, updateStore} from "./client.js";
 
@@ -97,7 +97,7 @@ const updateApodDisabledDates = (apod) => {
     const endDate = apodDateToString(new Date());
 
     if (startDate !== endDate) {
-        getImagesForDateRange(startDate, endDate).then(images => {
+        getApodImagesForDateRange(startDate, endDate).then(images => {
             const newDisabledDates = images.filter(image => image['media_type'] !== 'image').map(image => image.date);
 
             if (newDisabledDates.length > 0) {
@@ -131,7 +131,7 @@ const updateApodImage = (date, state) => {
         return state.apod.cachedImgs.filter(image => image.date === date)[0];
     // Get the new image from the API
     } else {
-        getImageForDate(date).then(image => {
+        getApodImageForDate(date).then(image => {
             getImageAspectRatio(image, state);
             return {
                 date: image.date,
@@ -145,4 +145,29 @@ const updateApodImage = (date, state) => {
     }
 };
 
-export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage};
+/**
+ * @description Gets the EPIC images information from the backend
+ * @param {object} state - The application's state
+ * @return {array} response - An array of EPIC images
+ */
+const updateEpicImages = (state) => {
+    return getLatestEpicImages().then(images =>  {
+        const year = images[0].date.substring(0, 4);
+        const month = images[0].date.substring(5, 7);
+        const day = images[0].date.substring(8, 10);
+        const date = year + '-' + month + '-' + day;
+        const latestImages = images.map(image => {
+            return {
+                date: image.date,
+                url: `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${image.image}.png`
+            }
+        });
+        const newEpic = Object.assign(state.epic, {date: date, images: latestImages});
+
+        return updateAndRender(store, {
+            epic: newEpic
+        });
+    });
+}
+
+export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage, updateEpicImages};
