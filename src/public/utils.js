@@ -1,4 +1,4 @@
-import {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages} from './api-calls.js';
+import {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages, getRoverManifest} from './api-calls.js';
 import {store} from "./store.js";
 import {updateAndRender, updateStore} from "./client.js";
 
@@ -170,4 +170,28 @@ const updateEpicImages = (state) => {
     });
 }
 
-export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage, updateEpicImages};
+/**
+ * @description Updates the selected rover metadata from the manifest
+ * @param {object} state - The application's state
+ * @return {object} store - The updated store
+ */
+const updateCurrentRover = (state) => {
+    getRoverManifest(state.rovers.currentRover.name).then(manifest => {
+        const photos = manifest.photo_manifest.photos;
+        const minDate = apodStringToDate(photos[0].earth_date);
+        const maxDate = apodStringToDate(photos.slice(-1)[0].earth_date);
+        const lastSol = photos.slice(-1)[0].sol;
+        const allSols = Array(lastSol).fill().map((x, i) => i);
+        const validSols = photos.map(photo => photo.sol);
+        const missingSols = allSols.filter(sol => !validSols.includes(sol));
+        const disabledDates = missingSols.map(sol => {
+            const baseDate = apodStringToDate(photos[0].earth_date);
+
+            return new Date(baseDate.setDate(baseDate.getDate() + sol + Math.floor(sol / 37) + Math.floor(sol / 1493)));
+        });
+        console.log(minDate, maxDate);
+        console.log(disabledDates);
+    });
+}
+
+export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage, updateEpicImages, updateCurrentRover};

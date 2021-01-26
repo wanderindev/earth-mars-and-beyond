@@ -294,7 +294,16 @@ const store = {
         date: '',
         images: []
     },
-    rovers: ['Curiosity', 'Opportunity', 'Spirit']
+    rovers: {
+        roverList: ['Curiosity', 'Oportunity', 'Spirit'],
+        currentRover:  {
+            name: 'Curiosity',
+            minDate: '',
+            maxDate: '',
+            disabledDates: [],
+            startDate: ''
+        }
+    }
 };
 
 export {store};

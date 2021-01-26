@@ -28,4 +28,14 @@ const getLatestEpicImages = () => {
         .then(res => res.json());
 };
 
-export {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages};
+/**
+ * @description Gets the manifest for a Mars rover
+ * @param {string} rover - The name of the rover
+ * @return {object} response - An object with the rovers manifest
+ */
+const getRoverManifest = (rover) => {
+    return fetch(`http://localhost:3000/mars-photos/manifest/${rover}`)
+        .then(res => res.json());
+};
+
+export {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages, getRoverManifest};

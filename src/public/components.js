@@ -1,4 +1,5 @@
-import {apodDateToString, updateApodImage, updateEpicImages} from './utils.js';
+import {apodDateToString, apodStringToDate, updateApodImage, updateEpicImages, updateCurrentRover} from './utils.js';
+
 
 /**
  * @description Returns the NavBar component
@@ -104,6 +105,8 @@ const EarthPage = (state) => {
  * @return {string} html - The HTML for the MarsPage
  */
 const MarsPage = (state) => {
+    updateCurrentRover(state);
+
     return ``;
 };
 
