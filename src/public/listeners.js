@@ -47,8 +47,15 @@ const setListeners = (state) => {
             $menuItems.forEach(el => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
+                    const rover = el.dataset.rover;
 
-                    updateAndRender(store, {menu: {active: target}});
+                    updateAndRender(store, {
+                        menu: {active: target},
+                        rovers: {
+                            selectedRover: rover,
+                            selectedRoverInfo: state.rovers.selectedRoverInfo
+                        }
+                    });
                 });
             });
         }
@@ -86,7 +93,7 @@ const setListeners = (state) => {
         }
 
 
-    }, 2000);
+    }, 1000);
 };
 
 export {setListeners};

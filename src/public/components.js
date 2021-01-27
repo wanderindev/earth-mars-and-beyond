@@ -22,7 +22,14 @@ const NavBar = (state) => {
         <div id="mainMenu" class="navbar-menu">
             <div class="navbar-end">  
                 <a class="navbar-item menu-item earth ${active === 'earth' ? 'is-active' : ''}" data-target="earth">Earth</a>  
-                <a class="navbar-item menu-item mars ${active === 'mars' ? 'is-active' : ''}" data-target="mars">Mars</a>
+                <div class="navbar-item has-dropdown is-hoverable mars">
+                    <a class="navbar-link" data-target="mars">Mars</a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item menu-item curiosity" data-target="mars" data-rover="curiosity">Curiosity Rover</a>
+                        <a class="navbar-item menu-item opportunity" data-target="mars" data-rover="opportunity">Opportunity Rover</a>
+                        <a class="navbar-item menu-item spirit" data-target="mars" data-rover="spirit">Spirit Rover</a>
+                    </div>
+                </div>
                 <a class="navbar-item menu-item beyond ${active === 'beyond' ? 'is-active' : ''}" data-target="beyond">And Beyond...</a>
                 <a class="navbar-item menu-item about ${active === 'about' ? 'is-active' : ''}" data-target="about">About</a>
             </div>
@@ -105,7 +112,9 @@ const EarthPage = (state) => {
  * @return {string} html - The HTML for the MarsPage
  */
 const MarsPage = (state) => {
-    updateCurrentRover(state);
+    if (state.rovers.selectedRoverInfo.disabledDates.length === 0) {
+        updateCurrentRover(state);
+    }
 
     return ``;
 };
