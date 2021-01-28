@@ -10,6 +10,7 @@ const port = 3000;
 const apodEndpoint = 'https://api.nasa.gov/planetary/apod?api_key=' + process.env.API_KEY;
 const epicEndpointLatest = 'https://epic.gsfc.nasa.gov/api/natural';
 const marsPhotosManifestEndpoint = 'https://api.nasa.gov/mars-photos/api/v1/manifests'
+const marsPhotosRoverEndpoint = 'https://api.nasa.gov/mars-photos/api/v1/rovers';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -60,6 +61,19 @@ app.get('/mars-photos/manifest/:rover', async (req, res) => {
         let manifest = await fetch(`${marsPhotosManifestEndpoint}/${rover}?api_key=` + process.env.API_KEY)
             .then(res => res.json())
         res.send(manifest)
+    } catch (err) {
+        console.log('error:', err);
+    }
+});
+
+// Connects to NASA's Mars Photos API and retrieves photos for a specific rover on a given date
+app.get('/mars-photos/rovers/:rover/:date', async (req, res) => {
+    const {rover, date} = req.params
+
+    try {
+        let photos = await fetch(`${marsPhotosRoverEndpoint}/${rover}/photos?earth_date=${date}&api_key=` + process.env.API_KEY)
+            .then(res => res.json())
+        res.send(photos)
     } catch (err) {
         console.log('error:', err);
     }
