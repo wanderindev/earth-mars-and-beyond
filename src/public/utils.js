@@ -1,4 +1,4 @@
-import {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages, getRoverManifest} from './api-calls.js';
+import {getApodImageForDate, getApodImagesForDateRange, getLatestEpicImages, getRoverManifest, getRoverPhotos} from './api-calls.js';
 import {store} from "./store.js";
 import {updateAndRender, updateStore} from "./client.js";
 
@@ -164,9 +164,7 @@ const updateEpicImages = (state) => {
         });
         const newEpic = Object.assign(state.epic, {date: date, images: latestImages});
 
-        return updateAndRender(store, {
-            epic: newEpic
-        });
+        return updateAndRender(store, {epic: newEpic});
     });
 }
 
@@ -175,23 +173,57 @@ const updateEpicImages = (state) => {
  * @param {object} state - The application's state
  * @return {object} store - The updated store
  */
-const updateCurrentRover = (state) => {
-    getRoverManifest(state.rovers.currentRover.name).then(manifest => {
+const updateSelectedRoverInfo = (state) => {
+    getRoverManifest(state.rovers.selectedRover).then(manifest => {
         const photos = manifest.photo_manifest.photos;
-        const minDate = apodStringToDate(photos[0].earth_date);
-        const maxDate = apodStringToDate(photos.slice(-1)[0].earth_date);
-        const lastSol = photos.slice(-1)[0].sol;
-        const allSols = Array(lastSol).fill().map((x, i) => i);
-        const validSols = photos.map(photo => photo.sol);
-        const missingSols = allSols.filter(sol => !validSols.includes(sol));
+        const missingSols = Array(photos.slice(-1)[0].sol).fill().map((x, i) => i).filter(sol => !photos.map(photo => photo.sol).includes(sol));
         const disabledDates = missingSols.map(sol => {
             const baseDate = apodStringToDate(photos[0].earth_date);
-
             return new Date(baseDate.setDate(baseDate.getDate() + sol + Math.floor(sol / 37) + Math.floor(sol / 1493)));
         });
-        console.log(minDate, maxDate);
-        console.log(disabledDates);
+        const newRover = Object.assign(state.rovers, {
+            selectedRover: state.rovers.selectedRover,
+            selectedRoverInfo: {
+                name: manifest.photo_manifest.name,
+                minDate: apodStringToDate(photos[0].earth_date),
+                maxDate: apodStringToDate(photos.slice(-1)[0].earth_date),
+                disabledDates: disabledDates,
+                startDate: apodStringToDate(photos.slice(-1)[0].earth_date),
+                launchDate: manifest.photo_manifest.launch_date,
+                landingDate: manifest.photo_manifest.landing_date,
+                totalPhotos: manifest.photo_manifest.total_photos,
+                status: manifest.photo_manifest.status
+            },
+            photos: {
+                reqDate: photos.slice(-1)[0].earth_date,
+                date: '',
+                images: []
+            }
+        });
+
+        return updateAndRender(store, {rovers: newRover});
     });
 }
 
-export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage, updateEpicImages, updateCurrentRover};
+/**
+ * @description Updates the list of photos for a rover on a given date
+ * @param {object} state - The application's state
+ * @return {object} store - The updated store
+ */
+const updateRoverPhotos = (state) => {
+    getRoverPhotos(state.rovers.selectedRover, state.rovers.photos.reqDate).then(photos => {
+        const images = photos.photos.filter(photo => photo.camera.name === 'FHAZ').map(photo => photo.img_src);
+        const newRover = Object.assign(state.rovers, {
+            selectedRover: state.rovers.selectedRover,
+            selectedRoverInfo: state.rovers.selectedRoverInfo,
+            photos: {
+                reqDate: state.rovers.photos.reqDate,
+                date: state.rovers.photos.reqDate,
+                images: images
+            }
+        });
+        return updateAndRender(store, {rovers: newRover});
+    });
+}
+
+export {apodDateToString, apodStringToDate, cacheImage, getApodDisabledDates, getDateWithTimeString, updateApodDisabledDates, updateApodImage, updateEpicImages, updateSelectedRoverInfo, updateRoverPhotos};

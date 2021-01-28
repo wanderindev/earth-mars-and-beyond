@@ -24,7 +24,8 @@ textarea {
 
 .title,
 .subtitle,
-.menu-item {
+.menu-item,
+.navbar-link {
     font-family: "IBM Plex Sans", sans-serif !important;
 }
 
@@ -57,9 +58,17 @@ main {
     max-height: none;
 }
 
-.navbar .menu-item:hover {
+.earth,
+.mars,
+.beyond,
+.about {
+    height: 60px;
+    margin-top: 53px;
+}
+
+.navbar .menu-item:hover,
+.navbar .navbar-link:hover {
     cursor: pointer;
-    background-color: #fff;
     color: #333;
     font-weight: 500;
 }
@@ -86,16 +95,21 @@ main {
     width: 73px;
 }
 
+#earth .title,
+#mars .title,
 #beyond .title {
     margin: 24px 0 32px;
 }
 
+#earth .subtitle,
+#mars .subtitle,
 #beyond .subtitle {
     margin-left: 22px;
 }
 
 .apod-exp,
-.epic-exp {
+.epic-exp,
+.mars-exp {
     width: 100%;
     text-indent: 40px;
     line-height: 2;
@@ -117,6 +131,10 @@ main {
     width: 100%;
     height: 100%;
     border-radius: 8px;
+}
+
+.carousel-column {
+    max-width: 832px;
 }
 
 .footer {

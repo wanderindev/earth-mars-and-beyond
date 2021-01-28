@@ -23,6 +23,7 @@ const updateStore = (store, newState) => {
 const updateAndRender = (store, newState) => {
     store = updateStore(store, newState);
     render(root, store);
+    console.log(store);
 }
 
 /**

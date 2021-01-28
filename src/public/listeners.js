@@ -13,7 +13,8 @@ const setListeners = (state) => {
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         const $menuItems = Array.prototype.slice.call(document.querySelectorAll('.menu-item'), 0);
         const $apodCalendar = document.querySelector('#apod-calendar');
-        const $calendars = bulmaCalendar.attach('[type="date"]', {
+        const $marsCalendar = document.querySelector('#mars-calendar');
+        const $apodCalendars = bulmaCalendar.attach('#apod-calendar', {
             type: 'date',
             color: 'black',
             isRange: false,
@@ -27,7 +28,21 @@ const setListeners = (state) => {
             maxDate: new Date(),
             disabledDates: getApodDisabledDates(state.apod)
         });
-        const $epicCarousel = document.querySelector('#epic-carousel');
+        const $marsCalendars = bulmaCalendar.attach('#mars-calendar', {
+            type: 'date',
+            color: 'black',
+            isRange: false,
+            lang: 'en',
+            dateFormat: 'YYYY-MM-DD',
+            showHeader: false,
+            showClearButton: false,
+            startDate: apodStringToDate(state.rovers.photos.reqDate),
+            displayMode: 'inline',
+            minDate: new Date(state.rovers.selectedRoverInfo.minDate),
+            maxDate: new Date(state.rovers.selectedRoverInfo.maxDate),
+            disabledDates: state.rovers.selectedRoverInfo.disabledDates
+        });
+        const $carousel = document.querySelector('#carousel');
 
         // Adds event listener for navigation burgers
         if ($navbarBurgers.length > 0) {
@@ -53,7 +68,8 @@ const setListeners = (state) => {
                         menu: {active: target},
                         rovers: {
                             selectedRover: rover,
-                            selectedRoverInfo: state.rovers.selectedRoverInfo
+                            selectedRoverInfo: state.rovers.selectedRoverInfo,
+                            photos: state.rovers.photos
                         }
                     });
                 });
@@ -61,12 +77,12 @@ const setListeners = (state) => {
         }
 
         // Loop on each calendar initialized
-        $calendars.forEach(calendar => {
+        /*$calendars.forEach(calendar => {
             // Add listener to select event
             calendar.on('select', date => {
                 //console.log(date);
             });
-        });
+        });*/
 
         // Accesses the APOD calendar and adds a select event listener
         if ($apodCalendar) {
@@ -80,7 +96,27 @@ const setListeners = (state) => {
             });
         }
 
-        if ($epicCarousel) {
+        // Accesses the Mars calendar and adds a select event listener
+        if ($marsCalendar) {
+            $marsCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
+                const selectedDate = datepicker.data.value();
+
+                if (selectedDate !== state.rovers.photos.reqDate) {
+                    const newRover = Object.assign(state.rovers, {
+                        selectedRover: state.rovers.selectedRover,
+                        selectedRoverInfo: state.rovers.selectedRoverInfo,
+                        photos: {
+                            reqDate: selectedDate,
+                            date: state.rovers.photos.reqDate,
+                            images: state.rovers.photos.images
+                        }
+                    });
+                    return updateAndRender(store, {rovers: newRover});
+                }
+            });
+        }
+
+        if ($carousel) {
             const glider = new Glider(document.querySelector('.glider'), {
                 slidesToShow: 1,
                 slidesToScroll: 1,
@@ -91,7 +127,6 @@ const setListeners = (state) => {
                 }
             });
         }
-
 
     }, 1000);
 };
