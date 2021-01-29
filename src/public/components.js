@@ -10,16 +10,27 @@ const NavBar = (state) => {
     return `
         <div class="navbar-brand">
             <a class="navbar-item has-text-black is-uppercase has-text-weight-semibold" href="#">
-                <img src="./assets/images/logo.png" alt="" width="463" height="150">
+                <img src="./assets/images/logo.png" alt="">
             </a>
             
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
+            <a id="burgers" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="collapsed-menu">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
             </a>
         </div>
-        <div id="mainMenu" class="navbar-menu">
+        <div id="collapsed-menu" class="navbar-menu">
+            <div class="navbar-end">  
+                <a class="navbar-item menu-item" data-target="earth">Earth</a>  
+                <a class="navbar-item menu-item" data-target="mars" data-rover="curiosity">Mars > Curiosity Rover</a>
+                <a class="navbar-item menu-item" data-target="mars" data-rover="opportunity">Mars > Opportunity Rover</a>
+                <a class="navbar-item menu-item" data-target="mars" data-rover="spirit">Mars > Spirit Rover</a>
+                <a class="navbar-item menu-item" data-target="beyond">And Beyond...</a>
+                <a class="navbar-item menu-item" data-target="about">About</a>
+            </div>
+        </div>
+        
+        <div id="menu" class="navbar-menu">
             <div class="navbar-end">  
                 <a class="navbar-item menu-item earth ${active === 'earth' ? 'is-active' : ''}" data-target="earth">Earth</a>  
                 <div class="navbar-item has-dropdown is-hoverable mars">
@@ -71,7 +82,7 @@ const EarthPage = (state) => {
             <div id="earth" class="${state.menu.active === 'earth' ? 'is-active' : ''}">
                 <div class="columns">
                     <div class="column has-text-centered">
-                        <h1 class="title is-1">Planet Earth <span class="subtitle is-4">on ${state.epic.date}</span></h1>
+                        <h1 class="title is-size-1-desktop is-size-2-mobile">Planet Earth <br><span class="subtitle is-4">on ${state.epic.date}</span></h1>
                     </div>
                 </div>
                 <div class="columns">
@@ -127,7 +138,7 @@ const MarsPage = (state) => {
             <div id="mars">
                 <div class="columns">
                     <div class="column has-text-centered">
-                        <h1 class="title is-1">Photos form the ${state.rovers.selectedRoverInfo.name} Rover
+                        <h1 class="title is-size-1-desktop is-size-2-mobile">Photos From The ${state.rovers.selectedRoverInfo.name} Rover<br>
                         <span class="subtitle is-4">on ${state.rovers.photos.date}</span></h1>
                     </div>
                 </div>
@@ -182,7 +193,7 @@ const BeyondPage = (state) => {
             <div id="beyond" class="${state.menu.active === 'beyond' ? 'is-active' : ''}">
                 <div class="columns">
                     <div class="column has-text-centered">
-                        <h1 class="title is-1">${image.title}<br><span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
+                        <h1 class="title is-size-1-desktop is-size-2-mobile">${image.title}<br><span class="subtitle is-4">${image.copyright ? ' by ' + image.copyright : ''}</span></h1>
                     </div>
                 </div>
                 <div class="columns">

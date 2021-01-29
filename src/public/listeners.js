@@ -10,7 +10,7 @@ const setListeners = (state) => {
     // Adds event listerners after the page is rendered
     setTimeout(() => {
         // Gets reference to DOM elements for event listeners
-        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        const $navbarBurgers = document.getElementById('burgers');
         const $menuItems = Array.prototype.slice.call(document.querySelectorAll('.menu-item'), 0);
         const $apodCalendar = document.querySelector('#apod-calendar');
         const $marsCalendar = document.querySelector('#mars-calendar');
@@ -45,15 +45,13 @@ const setListeners = (state) => {
         const $carousel = document.querySelector('#carousel');
 
         // Adds event listener for navigation burgers
-        if ($navbarBurgers.length > 0) {
-            $navbarBurgers.forEach(el => {
-                el.addEventListener('click', () => {
-                    const target = el.dataset.target;
-                    const $target = document.getElementById(target);
+        if ($navbarBurgers) {
+            $navbarBurgers.addEventListener('click', () => {
+                const target = $navbarBurgers.dataset.target;
+                const $target = document.getElementById(target);
 
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-                });
+                $navbarBurgers.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
             });
         }
 
@@ -63,6 +61,11 @@ const setListeners = (state) => {
                 el.addEventListener('click', () => {
                     const target = el.dataset.target;
                     const rover = el.dataset.rover;
+                    //const $burger = document.querySelector('.navbar-burger');
+                    //const $menu = document.getElementById('collapsed-menu');
+
+                    //$burger.classList.remove('is-active');
+                    //$menu.classList.remove('is-active');
 
                     updateAndRender(store, {
                         menu: {active: target},
