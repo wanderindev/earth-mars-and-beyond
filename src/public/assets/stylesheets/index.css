@@ -168,6 +168,11 @@ main {
     margin: auto;
 }
 
+.glider-next,
+.glider-prev {
+    top: 40%
+}
+
 .footer {
     margin-top: 48px;
     background-color: #02016A !important;
