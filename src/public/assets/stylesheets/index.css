@@ -168,6 +168,11 @@ main {
     margin: auto;
 }
 
+.glider-track {
+    align-items: center;
+    background-color: #000;
+}
+
 .glider-next,
 .glider-prev {
     top: 40%

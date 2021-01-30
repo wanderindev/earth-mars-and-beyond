@@ -175,27 +175,30 @@ const updateEpicImages = (state) => {
  */
 const updateSelectedRoverInfo = (state) => {
     getRoverManifest(state.rovers.selectedRover).then(manifest => {
+        const cutOffIndex = manifest.photo_manifest.name === "Curiosity" ? -1 :  manifest.photo_manifest.name === "Opportunity" ? -5 : -17;
         const photos = manifest.photo_manifest.photos;
         const missingSols = Array(photos.slice(-1)[0].sol).fill().map((x, i) => i).filter(sol => !photos.map(photo => photo.sol).includes(sol));
         const disabledDates = missingSols.map(sol => {
             const baseDate = apodStringToDate(photos[0].earth_date);
             return new Date(baseDate.setDate(baseDate.getDate() + sol + Math.floor(sol / 37) + Math.floor(sol / 1493)));
         });
+        console.log(apodStringToDate(photos.slice(cutOffIndex)[0].earth_date));
         const newRover = Object.assign(state.rovers, {
             selectedRover: state.rovers.selectedRover,
             selectedRoverInfo: {
                 name: manifest.photo_manifest.name,
                 minDate: apodStringToDate(photos[0].earth_date),
-                maxDate: apodStringToDate(photos.slice(-1)[0].earth_date),
+                maxDate: apodStringToDate(photos.slice(cutOffIndex)[0].earth_date),
                 disabledDates: disabledDates,
-                startDate: apodStringToDate(photos.slice(-1)[0].earth_date),
+                startDate: apodStringToDate(photos.slice(cutOffIndex)[0].earth_date),
                 launchDate: manifest.photo_manifest.launch_date,
                 landingDate: manifest.photo_manifest.landing_date,
                 totalPhotos: manifest.photo_manifest.total_photos,
+                completedDate: apodStringToDate(photos.slice(-1)[0].earth_date),
                 status: manifest.photo_manifest.status
             },
             photos: {
-                reqDate: photos.slice(-1)[0].earth_date,
+                reqDate: photos.slice(cutOffIndex)[0].earth_date,
                 date: '',
                 images: []
             }
@@ -212,14 +215,14 @@ const updateSelectedRoverInfo = (state) => {
  */
 const updateRoverPhotos = (state) => {
     getRoverPhotos(state.rovers.selectedRover, state.rovers.photos.reqDate).then(photos => {
-        const images = photos.photos.filter(photo => photo.camera.name === 'FHAZ').map(photo => photo.img_src);
+        const images = photos.photos.filter(photo => ['FHAZ', 'NAVCAM', 'PANCAM', 'RHAZ',].includes(photo.camera.name)).map(photo => photo.img_src);
         const newRover = Object.assign(state.rovers, {
             selectedRover: state.rovers.selectedRover,
             selectedRoverInfo: state.rovers.selectedRoverInfo,
             photos: {
                 reqDate: state.rovers.photos.reqDate,
                 date: state.rovers.photos.reqDate,
-                images: images
+                images: [...images].sort(() => 0.5 - Math.random()).slice(0, 25)
             }
         });
         return updateAndRender(store, {rovers: newRover});

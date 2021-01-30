@@ -168,7 +168,7 @@ const MarsPage = (state) => {
                             on <strong>${state.rovers.selectedRoverInfo.launchDate}</strong>, and landed on Mars on 
                             <strong>${state.rovers.selectedRoverInfo.landingDate}</strong>.   
                             ${state.rovers.selectedRoverInfo.status === 'complete' 
-                                ? 'The rover completed its mission on <strong>' + apodDateToString(state.rovers.selectedRoverInfo.maxDate) + '</strong>. While it was active, it sent '
+                                ? 'The rover completed its mission on <strong>' + apodDateToString(state.rovers.selectedRoverInfo.completedDate) + '</strong>. While it was active, it sent '
                                 : 'The rover is still active in Mars, and has sent '} 
                             a total of <strong>198439</strong> photos to Earth.
                         </div>

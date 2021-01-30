@@ -123,7 +123,7 @@ const setListeners = (state) => {
             const glider = new Glider(document.querySelector('.glider'), {
                 slidesToShow: 1,
                 slidesToScroll: 1,
-                dots: '.dots',
+                //dots: '.dots',
                 arrows: {
                     prev: '.glider-prev',
                     next: '.glider-next'
