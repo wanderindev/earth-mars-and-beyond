@@ -4,17 +4,45 @@ import {updateAndRender} from "./client.js";
 
 
 /**
- * @description Attaches event listeners to various DOM elements.  This function is called in the render() function.
+ * @description Attaches event listeners to various DOM elements.  This function is called from the render() function.
+ * @param {object} state - The application's state
  */
 const setListeners = (state) => {
-    // Adds event listerners after the page is rendered
+    // Adds event listeners after the page is rendered
     setTimeout(() => {
-        // Gets reference to DOM elements for event listeners
+        // Adds listeners for the navbar and menu items
         const $navbarBurgers = document.getElementById('burgers');
         const $menuItems = Array.prototype.slice.call(document.querySelectorAll('.menu-item'), 0);
+        if ($navbarBurgers && !$navbarBurgers.getAttribute('clickListenerAdded')) {
+            $navbarBurgers.setAttribute('clickListenerAdded', true);
+            $navbarBurgers.addEventListener('click', () => {
+                const $target = document.getElementById($navbarBurgers.dataset.target);
+
+                $navbarBurgers.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+            });
+        }
+        if ($menuItems.length > 0) {
+            $menuItems.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const rover = el.dataset.rover;
+
+                    return updateAndRender(store, {
+                        menu: {active: target},
+                        rovers: {
+                            selectedRover: rover,
+                            selectedRoverInfo: state.rovers.selectedRoverInfo,
+                            photos: state.rovers.photos
+                        }
+                    });
+                });
+            });
+        }
+
+        // Adds listener for the APOD calendar
         const $apodCalendar = document.querySelector('#apod-calendar');
-        const $marsCalendar = document.querySelector('#mars-calendar');
-        const $apodCalendars = bulmaCalendar.attach('#apod-calendar', {
+        bulmaCalendar.attach('#apod-calendar', {
             type: 'date',
             color: 'black',
             isRange: false,
@@ -28,7 +56,20 @@ const setListeners = (state) => {
             maxDate: new Date(),
             disabledDates: getApodDisabledDates(state.apod)
         });
-        const $marsCalendars = bulmaCalendar.attach('#mars-calendar', {
+        if ($apodCalendar) {
+            $apodCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
+                const selectedDate = datepicker.data.value();
+
+                if (selectedDate !== state.apod.reqDate) {
+                    const newApod = Object.assign(state.apod, {reqDate: selectedDate});
+                    return updateAndRender(store, {apod: newApod});
+                }
+            });
+        }
+
+        // Adds listener for the Mars rovers calendar
+        const $marsCalendar = document.querySelector('#mars-calendar');
+        bulmaCalendar.attach('#mars-calendar', {
             type: 'date',
             color: 'black',
             isRange: false,
@@ -42,64 +83,6 @@ const setListeners = (state) => {
             maxDate: new Date(state.rovers.selectedRoverInfo.maxDate),
             disabledDates: state.rovers.selectedRoverInfo.disabledDates
         });
-        const $carousel = document.querySelector('#carousel');
-
-        // Adds event listener for navigation burgers
-        if ($navbarBurgers) {
-            $navbarBurgers.addEventListener('click', () => {
-                const target = $navbarBurgers.dataset.target;
-                const $target = document.getElementById(target);
-
-                $navbarBurgers.classList.toggle('is-active');
-                $target.classList.toggle('is-active');
-            });
-        }
-
-        // Adds event listener for tabs
-        if ($menuItems.length > 0) {
-            $menuItems.forEach(el => {
-                el.addEventListener('click', () => {
-                    const target = el.dataset.target;
-                    const rover = el.dataset.rover;
-                    //const $burger = document.querySelector('.navbar-burger');
-                    //const $menu = document.getElementById('collapsed-menu');
-
-                    //$burger.classList.remove('is-active');
-                    //$menu.classList.remove('is-active');
-
-                    updateAndRender(store, {
-                        menu: {active: target},
-                        rovers: {
-                            selectedRover: rover,
-                            selectedRoverInfo: state.rovers.selectedRoverInfo,
-                            photos: state.rovers.photos
-                        }
-                    });
-                });
-            });
-        }
-
-        // Loop on each calendar initialized
-        /*$calendars.forEach(calendar => {
-            // Add listener to select event
-            calendar.on('select', date => {
-                //console.log(date);
-            });
-        });*/
-
-        // Accesses the APOD calendar and adds a select event listener
-        if ($apodCalendar) {
-            $apodCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
-                const selectedDate = datepicker.data.value();
-
-                if (selectedDate !== state.apod.reqDate) {
-                    const newApod = Object.assign(state.apod, {reqDate: selectedDate});
-                    return updateAndRender(store, {apod: newApod});
-                }
-            });
-        }
-
-        // Accesses the Mars calendar and adds a select event listener
         if ($marsCalendar) {
             $marsCalendar.bulmaCalendar.datePicker.on('select', datepicker => {
                 const selectedDate = datepicker.data.value();
@@ -119,19 +102,19 @@ const setListeners = (state) => {
             });
         }
 
+        // Adds listener for the photo carousels
+        const $carousel = document.querySelector('#carousel');
         if ($carousel) {
-            const glider = new Glider(document.querySelector('.glider'), {
+            new Glider(document.querySelector('.glider'), {
                 slidesToShow: 1,
                 slidesToScroll: 1,
-                //dots: '.dots',
                 arrows: {
                     prev: '.glider-prev',
                     next: '.glider-next'
                 }
             });
         }
-
-    }, 1000);
+    }, 500);
 };
 
 export {setListeners};
