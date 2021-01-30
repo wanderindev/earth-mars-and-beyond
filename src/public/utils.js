@@ -37,17 +37,22 @@ const apodStringToDate = (date) => {
 /**
  * @description Returns a string representing a date in format YYYY-MM-DD
  * @param {object} image - An object representing an image
- * @param {object} apod - An object with information for the APOD API
- * @return {object} store - The updated store object
+ * @param {object} state - The application's current state
+ * @return {object} newState - The application's updated state
  */
-const cacheImage = (image, apod) => {
-  const newCachedImgs = [...apod.cachedImgs, image];
-  const newApod = Object.assign(apod, {
+const cacheImage = (image, state) => {
+  const newCachedImgs = [...state.apod.cachedImgs, image];
+  const newApod = Object.assign(state.apod, {
     cachedImgs: newCachedImgs,
     currentImg: image,
   });
 
-  return updateAndRender(store, { apod: newApod });
+  return updateAndRender(store, {
+    menu: state.menu,
+    apod: newApod,
+    epic: state.epic,
+    rovers: state.rovers,
+  });
 };
 
 /**
@@ -101,7 +106,7 @@ const getImageAspectRatio = (image, state) => {
     if (
       !state.apod.cachedImgs.map((image) => image.date).includes(image.date)
     ) {
-      cacheImage(newImage, state.apod);
+      cacheImage(newImage, state);
     }
 
     return aspectRatio;
@@ -110,10 +115,11 @@ const getImageAspectRatio = (image, state) => {
 
 /**
  * @description Updates the blockedDates array for the APOD API
- * @param {object} apod - An object with information for the APOD API
- * @return {object} store - The updated store object
+ * @param {object} state - The application's current state
+ * @return {object} newState - The application's updated state
  */
-const updateApodDisabledDates = (apod) => {
+const updateApodDisabledDates = (state) => {
+  const apod = state.apod;
   const startDate = apod.checkedUntil;
   const endDate = apodDateToString(new Date());
 
@@ -131,7 +137,10 @@ const updateApodDisabledDates = (apod) => {
         });
 
         return updateStore(store, {
+          menu: state.menu,
           apod: newApod,
+          epic: state.epic,
+          rovers: state.rovers,
         });
       }
     });
@@ -149,11 +158,9 @@ const updateApodImage = (date, state) => {
 
   // The requested image is the current image.
   if (state.apod.currentImg && state.apod.currentImg.date === date) {
-    //console.log('currentImg', state.apod.currentImg);
     return state.apod.currentImg;
     // The requested image is in the cache.
   } else if (cachedImgsDates.includes(date)) {
-    //console.log('cache', state.apod.cachedImgs.filter(image => image.date === date)[0]);
     return state.apod.cachedImgs.filter((image) => image.date === date)[0];
     // Get the new image from the API
   } else {
@@ -193,14 +200,19 @@ const updateEpicImages = (state) => {
       images: latestImages,
     });
 
-    return updateAndRender(store, { epic: newEpic });
+    return updateAndRender(store, {
+      menu: state.menu,
+      apod: state.apod,
+      epic: newEpic,
+      rovers: state.rovers,
+    });
   });
 };
 
 /**
  * @description Updates the selected rover metadata from the manifest
- * @param {object} state - The application's state
- * @return {object} store - The updated store
+ * @param {object} state - The application's current state
+ * @return {object} newState - The application's updated state
  */
 const updateSelectedRoverInfo = (state) => {
   getRoverManifest(state.rovers.selectedRover).then((manifest) => {
@@ -243,14 +255,19 @@ const updateSelectedRoverInfo = (state) => {
       },
     });
 
-    return updateAndRender(store, { rovers: newRover });
+    return updateAndRender(store, {
+      menu: state.menu,
+      apod: state.apod,
+      epic: state.epic,
+      rovers: newRover,
+    });
   });
 };
 
 /**
  * @description Updates the list of photos for a rover on a given date
- * @param {object} state - The application's state
- * @return {object} store - The updated store
+ * @param {object} state - The application's current state
+ * @return {object} newState - The application's updated state
  */
 const updateRoverPhotos = (state) => {
   getRoverPhotos(state.rovers.selectedRover, state.rovers.photos.reqDate).then(
@@ -269,7 +286,12 @@ const updateRoverPhotos = (state) => {
           images: [...images].sort(() => 0.5 - Math.random()).slice(0, 25),
         },
       });
-      return updateAndRender(store, { rovers: newRover });
+      return updateAndRender(store, {
+        menu: state.menu,
+        apod: state.apod,
+        epic: state.epic,
+        rovers: newRover,
+      });
     }
   );
 };

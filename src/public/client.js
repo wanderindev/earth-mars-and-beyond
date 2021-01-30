@@ -6,21 +6,21 @@ const root = document.getElementById("root");
 
 /**
  * @description Updates the store
- * @param {object} store - The DOM element where the page will be rendered
- * @param {object} newState - The application's state
+ * @param {object} state - The application's current state
+ * @param {object} newState - The application's new state
  */
-const updateStore = (store, newState) => {
-  return Object.assign(store, newState);
+const updateStore = (state, newState) => {
+  return state.merge(newState);
 };
 
 /**
  * @description Updates the store and renders the page
- * @param {object} store - The DOM element where the page will be rendered
- * @param {object} newState - The application's state
+ * @param {object} state - The application's current state
+ * @param {object} newState - The application's new state
  */
-const updateAndRender = (store, newState) => {
-  store = updateStore(store, newState);
-  render(root, store);
+const updateAndRender = (state, newState) => {
+  state = updateStore(state, newState);
+  render(root, state);
 };
 
 /**
@@ -29,8 +29,8 @@ const updateAndRender = (store, newState) => {
  * @param {object} state - The application's state
  */
 const render = async (root, state) => {
-  root.innerHTML = App(state);
-  setListeners(state);
+  root.innerHTML = App(state.toJS());
+  setListeners(state.toJS());
 };
 
 /**

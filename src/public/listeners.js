@@ -32,6 +32,8 @@ const setListeners = (state) => {
 
           return updateAndRender(store, {
             menu: { active: target },
+            apod: state.apod,
+            epic: state.epic,
             rovers: {
               selectedRover: rover,
               selectedRoverInfo: state.rovers.selectedRoverInfo,
@@ -65,7 +67,12 @@ const setListeners = (state) => {
 
         if (selectedDate !== state.apod.reqDate) {
           const newApod = Object.assign(state.apod, { reqDate: selectedDate });
-          return updateAndRender(store, { apod: newApod });
+          return updateAndRender(store, {
+            menu: state.menu,
+            apod: newApod,
+            epic: state.epic,
+            rovers: state.rovers,
+          });
         }
       });
     }
@@ -101,7 +108,12 @@ const setListeners = (state) => {
               images: state.rovers.photos.images,
             },
           });
-          return updateAndRender(store, { rovers: newRover });
+          return updateAndRender(store, {
+            menu: state.menu,
+            apod: state.apod,
+            epic: state.epic,
+            rovers: newRover,
+          });
         }
       });
     }

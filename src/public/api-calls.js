@@ -3,7 +3,7 @@ const backendUrl = "http://localhost:3000";
 /**
  * @description Gets the APOD image information from the backend
  * @param {string} date - A string representing a date in the format YYYY-MM-DD
- * @return {object} response - An object with the APOD image information
+ * @return {promise} response - An object with the APOD image information
  */
 const getApodImageForDate = (date) => {
   return fetch(`${backendUrl}/apod/get_image?date=${date}`).then((res) =>
@@ -15,7 +15,7 @@ const getApodImageForDate = (date) => {
  * @description Gets APOD images for a date range from the backend
  * @param {string} startDate - A string representing a date in the format YYYY-MM-DD
  * @param {string} endDate - A string representing a date in the format YYYY-MM-DD
- * @return {array} response - An array of APOD images information
+ * @return {promise} response - An array of APOD images information
  */
 const getApodImagesForDateRange = (startDate, endDate) => {
   return fetch(
@@ -25,7 +25,7 @@ const getApodImagesForDateRange = (startDate, endDate) => {
 
 /**
  * @description Gets the EPIC images information from the most recent date
- * @return {array} response - An array with the EPIC images information
+ * @return {promise} response - An array with the EPIC images information
  */
 const getLatestEpicImages = () => {
   return fetch(`${backendUrl}/epic/get_latest`).then((res) => res.json());
@@ -34,7 +34,7 @@ const getLatestEpicImages = () => {
 /**
  * @description Gets the manifest for a Mars rover
  * @param {string} rover - The name of the rover
- * @return {object} response - An object with the rovers manifest
+ * @return {promise} response - An object with the rovers manifest
  */
 const getRoverManifest = (rover) => {
   return fetch(`${backendUrl}/mars-photos/manifest/${rover}`).then((res) =>
@@ -46,7 +46,7 @@ const getRoverManifest = (rover) => {
  * @description Gets the photos from a Mars rover in a given date
  * @param {string} rover - The name of the rover
  * @param {string} date - A string representing a date in the format YYYY-MM-DD
- * @return {object} response - An object with the rovers manifest
+ * @return {promise} response - An object with the rovers manifest
  */
 const getRoverPhotos = (rover, date) => {
   return fetch(

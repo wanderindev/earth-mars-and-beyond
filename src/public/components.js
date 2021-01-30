@@ -71,7 +71,6 @@ const NavBar = (state) => {
  */
 const PageContent = (state) => {
   const active = state.menu.active;
-
   return `
         ${active === "earth" ? EarthPage(state) : ""}
         ${active === "mars" ? MarsPage(state) : ""}
@@ -154,7 +153,7 @@ const MarsPage = (state) => {
     // noinspection JSUnusedLocalSymbols
     const newState = updateSelectedRoverInfo(state);
     return ``;
-  }else if (state.rovers.photos.date !== state.rovers.photos.reqDate) {
+  } else if (state.rovers.photos.date !== state.rovers.photos.reqDate) {
     // noinspection JSUnusedLocalSymbols
     const newState = updateRoverPhotos(state);
     return ``;
@@ -231,7 +230,7 @@ const MarsPage = (state) => {
 const BeyondPage = (state) => {
   const date = state.apod.reqDate || apodDateToString(new Date());
   // noinspection JSUnusedLocalSymbols
-  const newStore = updateApodDisabledDates(state.apod);
+  const newStore = updateApodDisabledDates(state);
   const image = updateApodImage(date, state);
 
   if (!image) {
