@@ -23,7 +23,7 @@ For this project, I had to create a website that consumes from various NASA APIs
 - Using pure functions
 - Supporting immutability with Immutable JS
 - Iterating over, reshaping, and accessing information from complex API responses
-- Using ES6 constructs like const, let, arrow functions, and new Array methods.
+- Using ES6 constructs like `const`, `let`, arrow functions, and new Array methods.
 
 ### Live Website
 Check out the live website [here](https://earth-mars-and-beyond.com/).
@@ -60,6 +60,13 @@ To install the project's dependencies run:
 ```sh
 yarn install
 ``` 
+
+### Add your NASA API key
+To access the NASA endpoints, you will need an API key.  You can get the key from the [NASA API site](https://api.nasa.gov/).
+
+To use your key, rename the file `.env-sample` located in the project's root to `.env` and add your key there.
+
+The API key should be secret so make sure to keep the `.env` file out of version control by adding the appropriate entry in your `.gitignore` file.
 
 ### Start the server
 Now you can start the server with:
