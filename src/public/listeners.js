@@ -15,6 +15,10 @@ const setListeners = (state) => {
       document.querySelectorAll(".menu-item"),
       0
     );
+    const $navbarLinks = Array.prototype.slice.call(
+        document.querySelectorAll(".navbar-link"),
+        0
+    );
     if ($navbarBurgers && !$navbarBurgers.getAttribute("clickListenerAdded")) {
       $navbarBurgers.setAttribute("clickListenerAdded", true);
       $navbarBurgers.addEventListener("click", () => {
@@ -40,6 +44,14 @@ const setListeners = (state) => {
               photos: state.rovers.photos,
             },
           });
+        });
+      });
+    }
+    if ($navbarLinks.length > 0) {
+      $navbarLinks.forEach((el) => {
+        el.addEventListener("click", () => {
+          const $target = document.getElementById("mars-dropdown");
+          $target.classList.add('is-active');
         });
       });
     }
