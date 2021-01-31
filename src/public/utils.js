@@ -10,10 +10,9 @@ import { updateAndRender, updateStore } from "./client.js";
 
 /**
  * @description Returns a string representing a date in format YYYY-MM-DD
- * @param {Date} date - A Date object
- * @return {string} date - A string representing a date
+ * @return {function} converter - A function that turns a date into a string
  */
-const apodDateToString = (date) => {
+const dateToStringConverter = (date) => {
   return (
     date.getFullYear() +
     "-" +
@@ -24,13 +23,25 @@ const apodDateToString = (date) => {
 };
 
 /**
+ * @description Returns a string representing a date in format YYYY-MM-DD
+ * @param {Date} date - A Date object
+ * @param {function} cb - A higher order function that returns a string from a date
+ * @return {string} date - A string representing a date
+ */
+const apodDateToString = (date, cb) => {
+  return cb(date);
+};
+
+/**
  * @description Returns a Date from a string in format YYYY-MM-DD
  * @param {string} date - A string representing a date
  * @return {Date} date - A Date object
  */
 const apodStringToDate = (date) => {
   return new Date(
-    getDateWithTimeString(date !== "" ? date : apodDateToString(new Date()))
+    getDateWithTimeString(
+      date !== "" ? date : apodDateToString(new Date(), dateToStringConverter)
+    )
   );
 };
 
@@ -121,7 +132,7 @@ const getImageAspectRatio = (image, state) => {
 const updateApodDisabledDates = (state) => {
   const apod = state.apod;
   const startDate = apod.checkedUntil;
-  const endDate = apodDateToString(new Date());
+  const endDate = apodDateToString(new Date(), dateToStringConverter);
 
   if (startDate !== endDate) {
     getApodImagesForDateRange(startDate, endDate).then((images) => {
@@ -300,6 +311,7 @@ export {
   apodDateToString,
   apodStringToDate,
   cacheImage,
+  dateToStringConverter,
   getApodDisabledDates,
   getDateWithTimeString,
   updateApodDisabledDates,

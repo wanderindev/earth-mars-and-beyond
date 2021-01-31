@@ -1,5 +1,6 @@
 import {
   apodDateToString,
+  dateToStringConverter,
   updateApodDisabledDates,
   updateApodImage,
   updateEpicImages,
@@ -75,7 +76,7 @@ const PageContent = (state) => {
         ${active === "earth" ? EarthPage(state) : ""}
         ${active === "mars" ? MarsPage(state) : ""}
         ${active === "beyond" ? BeyondPage(state) : ""}
-        ${active === "about" ? AboutPage(state) : ""}
+        ${active === "about" ? AboutPage() : ""}
     `;
 };
 
@@ -101,9 +102,7 @@ const EarthPage = (state) => {
                 <div class="columns">
                     <div class="column has-text-centered">
                         <h1 class="title is-size-1-desktop is-size-2-mobile">Planet Earth <br>
-                        <span class="subtitle is-4">on ${
-                          state.epic.date
-                        }</span></h1>
+                        <span class="subtitle is-4">on ${state.epic.date}</span></h1>
                     </div>
                 </div>
                 <div class="columns">
@@ -128,9 +127,7 @@ const EarthPage = (state) => {
                             storms.</p>
                             <p>Onboard the satellite, there's the <strong>Earth Polychromatic Imaging Camera 
                             (EPIC)</strong>, which takes images of Earth's sunlit side for monitoring purposes. EPIC 
-                            took the pictures on this page on <strong>${
-                              state.epic.date
-                            }</strong>, from a distance 
+                            took the pictures on this page on <strong>${state.epic.date}</strong>, from a distance 
                             of roughly one million miles.</p>
                         </div>
                     </div>
@@ -206,7 +203,9 @@ const MarsPage = (state) => {
                               roverInfo.status === "complete"
                                 ? "The rover completed its mission on <strong>" +
                                   apodDateToString(
-                                    state.rovers.selectedRoverInfo.completedDate
+                                    state.rovers.selectedRoverInfo
+                                      .completedDate,
+                                    dateToStringConverter
                                   ) +
                                   "</strong>. While it was active, it sent "
                                 : "The rover is still active in Mars, and has sent "
@@ -226,7 +225,8 @@ const MarsPage = (state) => {
  * @return {string} html - The HTML for the BeyondPage
  */
 const BeyondPage = (state) => {
-  const date = state.apod.reqDate || apodDateToString(new Date());
+  const date =
+    state.apod.reqDate || apodDateToString(new Date(), dateToStringConverter);
   // noinspection JSUnusedLocalSymbols
   const newStore = updateApodDisabledDates(state);
   const image = updateApodImage(date, state);
@@ -279,10 +279,9 @@ const BeyondPage = (state) => {
 
 /**
  * @description Returns the AboutPage component
- * @param {object} state - The application's state
  * @return {string} html - The HTML for the AboutPage
  */
-const AboutPage = (state) => {
+const AboutPage = () => {
   return `
             <div id="about">
                 <div class="columns">
