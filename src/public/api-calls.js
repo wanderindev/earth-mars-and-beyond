@@ -6,9 +6,17 @@ const backendUrl = "http://localhost:3000";
  * @return {promise} response - An object with the APOD image information
  */
 const getApodImageForDate = (date) => {
-  return fetch(`${backendUrl}/apod/get_image?date=${date}`).then((res) =>
-    res.json()
-  );
+  return fetch(`${backendUrl}/apod/get_image?date=${date}`)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error retrieving the APOD image information");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 /**
@@ -20,7 +28,17 @@ const getApodImageForDate = (date) => {
 const getApodImagesForDateRange = (startDate, endDate) => {
   return fetch(
     `${backendUrl}/apod/get_images?start_date=${startDate}&end_date=${endDate}`
-  ).then((res) => res.json());
+  )
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error retrieving the APOD images information");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 /**
@@ -28,7 +46,17 @@ const getApodImagesForDateRange = (startDate, endDate) => {
  * @return {promise} response - An array with the EPIC images information
  */
 const getLatestEpicImages = () => {
-  return fetch(`${backendUrl}/epic/get_latest`).then((res) => res.json());
+  return fetch(`${backendUrl}/epic/get_latest`)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error retrieving the latest EPIC images information");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 /**
@@ -37,9 +65,17 @@ const getLatestEpicImages = () => {
  * @return {promise} response - An object with the rovers manifest
  */
 const getRoverManifest = (rover) => {
-  return fetch(`${backendUrl}/mars-photos/manifest/${rover}`).then((res) =>
-    res.json()
-  );
+  return fetch(`${backendUrl}/mars-photos/manifest/${rover}`)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error retrieving the Mars rover's manifest");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 /**
@@ -48,10 +84,18 @@ const getRoverManifest = (rover) => {
  * @param {string} date - A string representing a date in the format YYYY-MM-DD
  * @return {promise} response - An object with the rovers manifest
  */
-const getRoverPhotos = (rover, date) => {
-  return fetch(
-    `${backendUrl}/mars-photos/rovers/${rover}/${date}`
-  ).then((res) => res.json());
+const getRoverImages = (rover, date) => {
+  return fetch(`${backendUrl}/mars-photos/rovers/${rover}/${date}`)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Error retrieving the Mars rover's images information");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export {
@@ -59,5 +103,5 @@ export {
   getApodImagesForDateRange,
   getLatestEpicImages,
   getRoverManifest,
-  getRoverPhotos,
+  getRoverImages,
 };
