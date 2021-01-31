@@ -3,7 +3,7 @@ import {
   getApodImagesForDateRange,
   getLatestEpicImages,
   getRoverManifest,
-  getRoverPhotos,
+  getRoverImages,
 } from "./api-calls.js";
 import { store } from "./store.js";
 import { updateAndRender, updateStore } from "./client.js";
@@ -129,7 +129,7 @@ const getImageAspectRatio = (image, state) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const updateApodDisabledDates = (state) => {
+const getDisabledDates = (state) => {
   const apod = state.apod;
   const startDate = apod.checkedUntil;
   const endDate = apodDateToString(new Date(), dateToStringConverter);
@@ -164,7 +164,7 @@ const updateApodDisabledDates = (state) => {
  * @param {object} state - The application's state
  * @return {object} response - An object with the APOD image information
  */
-const updateApodImage = (date, state) => {
+const getApodImage = (date, state) => {
   const cachedImgsDates = state.apod.cachedImgs.map((image) => image.date);
 
   // The requested image is the current image.
@@ -194,7 +194,7 @@ const updateApodImage = (date, state) => {
  * @param {object} state - The application's state
  * @return {array} response - An array of EPIC images
  */
-const updateEpicImages = (state) => {
+const getEpicImages = (state) => {
   return getLatestEpicImages().then((images) => {
     const year = images[0].date.substring(0, 4);
     const month = images[0].date.substring(5, 7);
@@ -225,7 +225,7 @@ const updateEpicImages = (state) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const updateSelectedRoverInfo = (state) => {
+const getRoverInfo = (state) => {
   getRoverManifest(state.rovers.selectedRover).then((manifest) => {
     const name = manifest.photo_manifest.name;
     const cutOff = name === "Curiosity" ? -1 : name === "Spirit" ? -17 : -5;
@@ -272,6 +272,7 @@ const updateSelectedRoverInfo = (state) => {
       epic: state.epic,
       rovers: newRover,
     });
+
   });
 };
 
@@ -280,8 +281,8 @@ const updateSelectedRoverInfo = (state) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const updateRoverPhotos = (state) => {
-  getRoverPhotos(state.rovers.selectedRover, state.rovers.photos.reqDate).then(
+const getRoverPhotos = (state) => {
+  getRoverImages(state.rovers.selectedRover, state.rovers.photos.reqDate).then(
     (photos) => {
       const images = photos.photos
         .filter((photo) =>
@@ -314,9 +315,9 @@ export {
   dateToStringConverter,
   getApodDisabledDates,
   getDateWithTimeString,
-  updateApodDisabledDates,
-  updateApodImage,
-  updateEpicImages,
-  updateSelectedRoverInfo,
-  updateRoverPhotos,
+  getDisabledDates,
+  getApodImage,
+  getEpicImages,
+  getRoverInfo,
+  getRoverPhotos,
 };

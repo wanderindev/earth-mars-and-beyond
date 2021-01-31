@@ -1,4 +1,9 @@
-import { apodStringToDate, getApodDisabledDates } from "./utils.js";
+import {
+  apodDateToString,
+  apodStringToDate,
+  dateToStringConverter,
+  getApodDisabledDates,
+} from "./utils.js";
 import { store } from "./store.js";
 import { updateAndRender } from "./client.js";
 
@@ -16,8 +21,8 @@ const setListeners = (state) => {
       0
     );
     const $navbarLinks = Array.prototype.slice.call(
-        document.querySelectorAll(".navbar-link"),
-        0
+      document.querySelectorAll(".navbar-link"),
+      0
     );
     if ($navbarBurgers && !$navbarBurgers.getAttribute("clickListenerAdded")) {
       $navbarBurgers.setAttribute("clickListenerAdded", true);
@@ -33,6 +38,12 @@ const setListeners = (state) => {
         el.addEventListener("click", () => {
           const target = el.dataset.target;
           const rover = el.dataset.rover;
+          const date =
+            rover === "curiosity"
+              ? "2021-01-29"
+              : rover === "opportunity"
+              ? "2018-06-05"
+              : "2010-03-03";
 
           return updateAndRender(store, {
             menu: { active: target },
@@ -41,7 +52,11 @@ const setListeners = (state) => {
             rovers: {
               selectedRover: rover,
               selectedRoverInfo: state.rovers.selectedRoverInfo,
-              photos: state.rovers.photos,
+              photos: {
+                reqDate: date,
+                date: "",
+                images: state.rovers.images,
+              },
             },
           });
         });
@@ -51,7 +66,7 @@ const setListeners = (state) => {
       $navbarLinks.forEach((el) => {
         el.addEventListener("click", () => {
           const $target = document.getElementById("mars-dropdown");
-          $target.classList.add('is-active');
+          $target.classList.add("is-active");
         });
       });
     }
