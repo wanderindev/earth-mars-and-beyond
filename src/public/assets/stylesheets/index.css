@@ -34,14 +34,10 @@ body {
 }
 
 header {
-  /* header styles */
+
 }
 
 main {
-  /*
-  flex: 1;
-  padding: 20px;
-   */
     min-height: 100vh;
 }
 
@@ -117,25 +113,29 @@ main {
 
 #beyond,
 #earth,
-#mars {
+#mars,
+#about {
     padding: 0 24px;
 }
 
 #earth .title,
 #mars .title,
-#beyond .title {
+#beyond .title
+#about .title {
     margin: 24px 0 32px;
 }
 
 #earth .subtitle,
 #mars .subtitle,
-#beyond .subtitle {
+#beyond .subtitle,
+#about .subtitle {
     margin-left: 22px;
 }
 
 .apod-exp,
 .epic-exp,
-.mars-exp {
+.mars-exp,
+.about-exp {
     width: 100%;
     text-indent: 40px;
     line-height: 2;
@@ -157,6 +157,21 @@ main {
     width: 100%;
     height: 100%;
     border-radius: 8px;
+}
+
+h2.title {
+    text-indent: 0;
+    margin-top: 32px;
+}
+
+#about ul {
+    list-style: square;
+    padding: 18px;
+}
+
+#about li {
+    text-indent: 0;
+    padding-left: 24px;
 }
 
 .datetimepicker {
