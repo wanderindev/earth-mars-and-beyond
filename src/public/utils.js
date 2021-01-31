@@ -10,7 +10,7 @@ import { updateAndRender, updateStore } from "./client.js";
 
 /**
  * @description Returns a string representing a date in format YYYY-MM-DD
- * @return {function} converter - A function that turns a date into a string
+ * @return {string} date - A string representing a date
  */
 const dateToStringConverter = (date) => {
   return (
