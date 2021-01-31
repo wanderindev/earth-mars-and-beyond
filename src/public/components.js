@@ -43,7 +43,7 @@ const NavBar = (state) => {
                 <a class="navbar-item menu-item earth ${
                   active === "earth" ? "is-active" : ""
                 }" data-target="earth">Earth</a>  
-                <div class="navbar-item has-dropdown mars">
+                <div class="navbar-item has-dropdown is-hoverable mars">
                     <a class="navbar-link" data-target="mars">Mars</a>
                     <div class="navbar-dropdown">
                         <a class="navbar-item menu-item curiosity" data-target="mars" 
