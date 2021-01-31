@@ -16,7 +16,7 @@ const NavBar = (state) => {
   const active = state.menu.active;
   return `
         <div class="navbar-brand">
-            <a class="navbar-item has-text-black is-uppercase has-text-weight-semibold" href="#">
+            <a class="navbar-item has-text-black is-uppercase has-text-weight-semibold" href="index.html">
                 <img src="./assets/images/logo.png" alt="">
             </a>
             
