@@ -166,7 +166,7 @@ const MarsPage = (state) => {
                 <div class="columns">
                     <div class="column has-text-centered">
                         <h1 class="title is-size-1-desktop is-size-2-mobile">
-                            Photos From The ${roverInfo.name} Rover<br>
+                            Photos from the ${roverInfo.name} Rover<br>
                             <span class="subtitle is-4">on ${
                               state.rovers.photos.date
                             }</span>
