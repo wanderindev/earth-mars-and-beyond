@@ -29,7 +29,7 @@ const updateAndRender = (state, newState) => {
  * @param {object} state - The application's state
  */
 const render = async (root, state) => {
-  root.innerHTML = App(state.toJS());
+  root.innerHTML = await App(state.toJS());
   setListeners(state.toJS());
 };
 
@@ -38,14 +38,14 @@ const render = async (root, state) => {
  * @param {object} state - The application's state
  * @return {string} html - The HTML for the entire page
  */
-const App = (state) => {
+const App = async (state) => {
   return `
         <header></header>
         <main>
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 ${NavBar(state)}
             </nav>
-            <div>${PageContent(state)}</div>
+            <div>${await PageContent(state)}</div>
         </main>
         <footer class="footer">${Footer()}</footer>
     `;
