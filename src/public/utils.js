@@ -190,34 +190,44 @@ const getApodImage = (date, state) => {
 };
 
 /**
- * @description Gets the EPIC images information from the backend
- * @param {object} state - The application's state
- * @return {array} response - An array of EPIC images
+ * @description Gets the date information for the EPIC images to be shown
+ * @param {object} image - An object representing the EPIC image
+ * @return {object} dateInfo - An object with the year, month, day, and date information
  */
-const getEpicImages = (state) => {
-  return getLatestEpicImages().then((images) => {
-    const year = images[0].date.substring(0, 4);
-    const month = images[0].date.substring(5, 7);
-    const day = images[0].date.substring(8, 10);
-    const date = year + "-" + month + "-" + day;
-    const latestImages = images.map((image) => {
-      return {
-        date: image.date,
-        url: `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${image.image}.png`,
-      };
-    });
-    const newEpic = Object.assign(state.epic, {
-      date: date,
-      images: latestImages,
-    });
+const getEpicDate = (image) => {
+  return {
+    year: image.date.substring(0, 4),
+    month: image.date.substring(5, 7),
+    day: image.date.substring(8, 10),
+    date: image.date.substring(0, 4) + "-" + image.date.substring(5, 7) + "-" + image.date.substring(8, 10)
+  }
+}
 
-    return updateAndRender(store, {
-      menu: state.menu,
-      apod: state.apod,
-      epic: newEpic,
-      rovers: state.rovers,
-    });
+/**
+ * @description Gets the EPIC information from the backend
+ * @param {object} state - The application's state
+ * @return {object} newEpic - An object with the EPIC information
+ */
+const getEpicInfo = async (state) => {
+  const images = await getLatestEpicImages();
+  const {year, month, day, date} = getEpicDate(images[0]);
+  const epicImages = images.map((image) => {
+    return {
+      date: image.date,
+      url: `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${image.image}.png`,
+    };
   });
+  const newEpic = Object.assign(state.epic, {
+    date: date,
+    images: epicImages,
+  });
+  const newState = updateStore(store, {
+    menu: state.menu,
+    apod: state.apod,
+    epic: newEpic,
+    rovers: state.rovers,
+  });
+  return newEpic;
 };
 
 /**
@@ -317,7 +327,7 @@ export {
   getDateWithTimeString,
   getDisabledDates,
   getApodImage,
-  getEpicImages,
+  getEpicInfo,
   getRoverInfo,
   getRoverPhotos,
 };
