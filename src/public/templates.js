@@ -3,6 +3,8 @@
  * @module ./templates.js
  */
 
+import { apodDateToString, dateToStringConverter } from "./utils.js";
+
 /**
  * @description Returns the HTML for the NavBar component
  * @param {string} active - The name of the active page
@@ -106,4 +108,76 @@ const earthPageTemplate = (date, slides) => {
   `;
 };
 
-export { navbarTemplate, earthPageTemplate };
+/**
+ * @description Returns the HTML for the EarthPage component
+ * @param {string} name - The name of the rover
+ * @param {string} date - A string representing the date of the rover photos to be shown
+ * @param {string} launchDate - A string representing the rover's launch date
+ * @param {string} landingDate - A string representing the rover's landing date
+ * @param {string} completeDate - A string representing the rover's mission complete date
+ * @param {string} status - The mission status
+ * @param {number} totalPhotos - The total number of photos sent by the rover
+ * @param {string} slides - The HTML for the rover photo slides
+ * @return {string} html - The HTML for the MarsPage component
+ */
+const marsPageTemplate = (
+  name,
+  date,
+  launchDate,
+  landingDate,
+  completeDate,
+  status,
+  totalPhotos,
+  slides
+) => {
+  return `
+    <div id="mars">
+        <div class="columns">
+            <div class="column has-text-centered">
+                <h1 class="title is-size-1-desktop is-size-2-mobile">
+                    Photos from the ${name} Rover<br>
+                    <span class="subtitle is-4">on ${date}</span>
+                </h1>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column carousel-column has-text-centered">
+                <div id="carousel" class="glider-contain">
+                    <div class="glider">
+                        ${slides}
+                    </div>
+                    <button aria-label="Previous" class="glider-prev">«</button>
+                    <button aria-label="Next" class="glider-next">»</button>
+                    <div role="tablist" class="dots"></div>
+                </div>
+            </div>
+            <div class="column is-narrow">
+                <div class="mars-info">
+                    <div class="block">
+                        <input class="input is-hidden" id="mars-calendar" type="date">
+                    </div>                                                                
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <div class="block mars-exp has-text-justified">
+                    The <strong>${name}</strong> rover was launched from Cape Canaveral 
+                    on <strong>${launchDate}</strong>, and landed on Mars on 
+                    <strong>${landingDate}</strong>.   
+                    ${
+                      status === "complete"
+                        ? "The rover completed its mission on <strong>" +
+                          completedDate +
+                          "</strong>. While it was active, it sent "
+                        : "The rover is still active in Mars, and has sent "
+                    } 
+                    a total of <strong>${totalPhotos}</strong> photos to Earth.
+                </div>
+            </div>
+        </div>
+    </div>
+  `;
+};
+
+export { navbarTemplate, earthPageTemplate, marsPageTemplate };
