@@ -2,6 +2,7 @@ import {
   navbarTemplate,
   earthPageTemplate,
   marsPageTemplate,
+  beyondPageTemplate
 } from "./templates.js";
 
 import {
@@ -99,46 +100,7 @@ const BeyondPage = (state) => {
   if (!image) {
     return ``;
   }
-  return `
-    <div id="beyond">
-        <div class="columns">
-            <div class="column has-text-centered">
-                <h1 class="title is-size-1-desktop is-size-2-mobile">
-                  ${image.title}<br>
-                  <span class="subtitle is-4">
-                    ${image.copyright ? " by " + image.copyright : ""}
-                  </span>
-                </h1>
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column has-text-centered">
-                <div class="apod-img-wrapper">
-                    <img class="apod-img" src="${image.url}" alt="" />
-                </div>
-            </div>
-            <div class="column is-narrow">
-                <div class="apod-info">
-                    <div class="block">
-                        <input class="input is-hidden" id="apod-calendar" type="date">
-                    </div>                                                                
-                </div>
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column">
-                <div class="block apod-exp has-text-justified">
-                    ${image.explanation}
-                </div>
-            </div>
-        </div>
-    </div>
-    <style>
-        .apod-img-wrapper:after {
-            padding-bottom: ${image.aspectRatio}%;
-        }            
-    </style>
-  `;
+  return beyondPageTemplate(image.title, image.copyright, image.url, image.explanation, image.aspectRatio);
 };
 
 /**

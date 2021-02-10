@@ -180,4 +180,53 @@ const marsPageTemplate = (
   `;
 };
 
-export { navbarTemplate, earthPageTemplate, marsPageTemplate };
+const beyondPageTemplate = (
+  title,
+  copyright,
+  url,
+  explanation,
+  aspectRatio
+) => {
+  return `
+    <div id="beyond">
+        <div class="columns">
+            <div class="column has-text-centered">
+                <h1 class="title is-size-1-desktop is-size-2-mobile">
+                  ${title}<br>
+                  <span class="subtitle is-4">
+                    ${copyright ? " by " + copyright : ""}
+                  </span>
+                </h1>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column has-text-centered">
+                <div class="apod-img-wrapper">
+                    <img class="apod-img" src="${url}" alt="" />
+                </div>
+            </div>
+            <div class="column is-narrow">
+                <div class="apod-info">
+                    <div class="block">
+                        <input class="input is-hidden" id="apod-calendar" type="date">
+                    </div>                                                                
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <div class="block apod-exp has-text-justified">
+                    ${explanation}
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .apod-img-wrapper:after {
+            padding-bottom: ${aspectRatio}%;
+        }            
+    </style>
+  `;
+};
+
+export { navbarTemplate, earthPageTemplate, marsPageTemplate, beyondPageTemplate };
