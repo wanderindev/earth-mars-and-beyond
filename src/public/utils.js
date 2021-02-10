@@ -199,9 +199,14 @@ const getEpicDate = (image) => {
     year: image.date.substring(0, 4),
     month: image.date.substring(5, 7),
     day: image.date.substring(8, 10),
-    date: image.date.substring(0, 4) + "-" + image.date.substring(5, 7) + "-" + image.date.substring(8, 10)
-  }
-}
+    date:
+      image.date.substring(0, 4) +
+      "-" +
+      image.date.substring(5, 7) +
+      "-" +
+      image.date.substring(8, 10),
+  };
+};
 
 /**
  * @description Gets the EPIC information from the backend
@@ -210,7 +215,7 @@ const getEpicDate = (image) => {
  */
 const getEpicInfo = async (state) => {
   const images = await getLatestEpicImages();
-  const {year, month, day, date} = getEpicDate(images[0]);
+  const { year, month, day, date } = getEpicDate(images[0]);
   const epicImages = images.map((image) => {
     return {
       date: image.date,
@@ -231,59 +236,83 @@ const getEpicInfo = async (state) => {
 };
 
 /**
+ * @description Returns an array with the sols when no photos were sent to Earth
+ * @param {array} photos - An array of photos sent by the rover to Earth
+ * @return {array} missingSols - An array of sols
+ */
+const getMissingSols = (photos) => {
+  return Array(photos.slice(-1)[0].sol)
+    .fill()
+    .map((x, i) => i)
+    .filter((sol) => !photos.map((photo) => photo.sol).includes(sol));
+};
+
+/**
+ * @description Returns an array with the sols when no photos were sent to Earth
+ * @param {array} photos - An array of photos sent by the rover to Earth
+ * @param {string} minDate - A string representing the date for the first photo sent by the rover to Earth
+ * @return {array} disabledDates - An array of dates that should be disabled on the rover's calendar
+ */
+const getRoverDisabledDates = (photos, minDate) => {
+  const missingSols = getMissingSols(photos);
+  return missingSols.map((sol) => {
+    const baseDate = apodStringToDate(minDate);
+    return new Date(
+      baseDate.setDate(
+        baseDate.getDate() + sol + Math.floor(sol / 37) + Math.floor(sol / 1493)
+      )
+    );
+  });
+};
+
+/**
  * @description Updates the selected rover metadata from the manifest
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const getRoverInfo = (state) => {
-  getRoverManifest(state.rovers.selectedRover).then((manifest) => {
-    const name = manifest.photo_manifest.name;
-    const cutOff = name === "Curiosity" ? -1 : name === "Spirit" ? -17 : -5;
-    const photos = manifest.photo_manifest.photos;
-    const missingSols = Array(photos.slice(-1)[0].sol)
-      .fill()
-      .map((x, i) => i)
-      .filter((sol) => !photos.map((photo) => photo.sol).includes(sol));
-    const disabledDates = missingSols.map((sol) => {
-      const baseDate = apodStringToDate(photos[0].earth_date);
-      return new Date(
-        baseDate.setDate(
-          baseDate.getDate() +
-            sol +
-            Math.floor(sol / 37) +
-            Math.floor(sol / 1493)
-        )
-      );
-    });
-    const newRover = Object.assign(state.rovers, {
-      selectedRover: state.rovers.selectedRover,
-      selectedRoverInfo: {
-        name: manifest.photo_manifest.name,
-        minDate: apodStringToDate(photos[0].earth_date),
-        maxDate: apodStringToDate(photos.slice(cutOff)[0].earth_date),
-        disabledDates: disabledDates,
-        startDate: apodStringToDate(photos.slice(cutOff)[0].earth_date),
-        launchDate: manifest.photo_manifest.launch_date,
-        landingDate: manifest.photo_manifest.landing_date,
-        totalPhotos: manifest.photo_manifest.total_photos,
-        completedDate: apodStringToDate(photos.slice(-1)[0].earth_date),
-        status: manifest.photo_manifest.status,
-      },
-      photos: {
-        reqDate: photos.slice(cutOff)[0].earth_date,
-        date: "",
-        images: [],
-      },
-    });
-
-    return updateAndRender(store, {
-      menu: state.menu,
-      apod: state.apod,
-      epic: state.epic,
-      rovers: newRover,
-    });
-
+const getRoverInfo = async (state) => {
+  const manifest = await getRoverManifest(state.rovers.selectedRover);
+  const cutOff = name === "Curiosity" ? -1 : name === "Spirit" ? -17 : -5;
+  const photos = manifest.photo_manifest.photos;
+  const roverPhotos = await getRoverPhotos(state);
+  const newRover = Object.assign(state.rovers, {
+    selectedRover: state.rovers.selectedRover,
+    selectedRoverInfo: {
+      name: manifest.photo_manifest.name,
+      minDate: apodStringToDate(photos[0].earth_date),
+      maxDate: apodStringToDate(photos.slice(cutOff)[0].earth_date),
+      disabledDates: getRoverDisabledDates(photos, photos[0].earth_date),
+      startDate: apodStringToDate(photos.slice(cutOff)[0].earth_date),
+      launchDate: manifest.photo_manifest.launch_date,
+      landingDate: manifest.photo_manifest.landing_date,
+      totalPhotos: manifest.photo_manifest.total_photos,
+      completedDate: apodStringToDate(photos.slice(-1)[0].earth_date),
+      status: manifest.photo_manifest.status,
+    },
+    photos: roverPhotos,
   });
+  const newState = updateStore(store, {
+    menu: state.menu,
+    apod: state.apod,
+    epic: state.epic,
+    rovers: newRover,
+  });
+  console.log(newRover);
+  return newRover;
+};
+
+/**
+ * @description Returns an array with 25 randomly selected photos
+ * @param {array} photos - An array with all the photos sent by the rover on the selected date
+ * @return {array} selectedPhotos - An array with 25 randomly selected photos
+ */
+const getSelectedPhotos = (photos) => {
+  const images = photos.photos
+    .filter((photo) =>
+      ["FHAZ", "NAVCAM", "PANCAM", "RHAZ"].includes(photo.camera.name)
+    )
+    .map((photo) => photo.img_src);
+  return [...images].sort(() => 0.5 - Math.random()).slice(0, 25);
 };
 
 /**
@@ -291,31 +320,29 @@ const getRoverInfo = (state) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const getRoverPhotos = (state) => {
-  getRoverImages(state.rovers.selectedRover, state.rovers.photos.reqDate).then(
-    (photos) => {
-      const images = photos.photos
-        .filter((photo) =>
-          ["FHAZ", "NAVCAM", "PANCAM", "RHAZ"].includes(photo.camera.name)
-        )
-        .map((photo) => photo.img_src);
-      const newRover = Object.assign(state.rovers, {
-        selectedRover: state.rovers.selectedRover,
-        selectedRoverInfo: state.rovers.selectedRoverInfo,
-        photos: {
-          reqDate: state.rovers.photos.reqDate,
-          date: state.rovers.photos.reqDate,
-          images: [...images].sort(() => 0.5 - Math.random()).slice(0, 25),
-        },
-      });
-      return updateAndRender(store, {
-        menu: state.menu,
-        apod: state.apod,
-        epic: state.epic,
-        rovers: newRover,
-      });
-    }
+const getRoverPhotos = async (state) => {
+  const photos = await getRoverImages(
+    state.rovers.selectedRover,
+    state.rovers.photos.reqDate
   );
+  const selectedPhotos = getSelectedPhotos(photos);
+  const newRover = Object.assign(state.rovers, {
+    selectedRover: state.rovers.selectedRover,
+    selectedRoverInfo: state.rovers.selectedRoverInfo,
+    photos: {
+      reqDate: state.rovers.photos.reqDate,
+      date: state.rovers.photos.reqDate,
+      images: selectedPhotos,
+    },
+  });
+  const newState = updateStore(store, {
+    menu: state.menu,
+    apod: state.apod,
+    epic: state.epic,
+    rovers: newRover,
+  });
+  console.log(newRover.photos);
+  return newRover.photos;
 };
 
 export {

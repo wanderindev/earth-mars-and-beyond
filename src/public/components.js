@@ -1,6 +1,7 @@
 import {
-    navbarTemplate,
-    earthPageTemplate
+  navbarTemplate,
+  earthPageTemplate,
+  marsPageTemplate,
 } from "./templates.js";
 
 import {
@@ -30,7 +31,7 @@ const PageContent = async (state) => {
   const active = state.menu.active;
   return `
     ${active === "earth" ? await EarthPage(state) : ""}
-    ${active === "mars" ? MarsPage(state) : ""}
+    ${active === "mars" ? await MarsPage(state) : ""}
     ${active === "beyond" ? BeyondPage(state) : ""}
     ${active === "about" ? AboutPage() : ""}
   `;
@@ -42,14 +43,14 @@ const PageContent = async (state) => {
  * @return {string} html - The HTML for the EarthPage
  */
 const EarthPage = (state) => {
-  return getEpicInfo(state).then(epic => {
-      const date = epic.date;
-      const slides = epic.images
-          .map((image) => {
-              return '<div><img src="' + image.url + '" width="90%" alt=""/></div>';
-          })
-          .reduce((acc, slide) => acc + slide, "");
-      return earthPageTemplate(date, slides);
+  return getEpicInfo(state).then((epic) => {
+    const date = epic.date;
+    const slides = epic.images
+      .map((image) => {
+        return '<div><img src="' + image.url + '" width="90%" alt=""/></div>';
+      })
+      .reduce((acc, slide) => acc + slide, "");
+    return earthPageTemplate(date, slides);
   });
 };
 
@@ -59,73 +60,30 @@ const EarthPage = (state) => {
  * @return {string} html - The HTML for the MarsPage
  */
 const MarsPage = (state) => {
-  const roverInfo = state.rovers.selectedRoverInfo;
-  const roverName = roverInfo.name.toLowerCase() === state.rovers.selectedRover ? roverInfo.name.toLowerCase() : getRoverInfo(state);
-  const photos = state.rovers.photos;
-  const images = photos.date === photos.reqDate ? photos.images : getRoverPhotos(state);
-  const slides = images ? images.map((image) => {
-          return '<div><img src="' + image + '" width="90%" alt="" /></div>';
-        }).reduce((acc, slide) => acc + slide, "") : ``;
-  if (!roverName || !slides) {
-    return ``;
-  }
-  return `
-    <div id="mars">
-        <div class="columns">
-            <div class="column has-text-centered">
-                <h1 class="title is-size-1-desktop is-size-2-mobile">
-                    Photos from the ${roverInfo.name} Rover<br>
-                    <span class="subtitle is-4">on ${
-                      state.rovers.photos.date
-                    }</span>
-                </h1>
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column carousel-column has-text-centered">
-                <div id="carousel" class="glider-contain">
-                    <div class="glider">
-                        ${slides}
-                    </div>
-                    <button aria-label="Previous" class="glider-prev">«</button>
-                    <button aria-label="Next" class="glider-next">»</button>
-                    <div role="tablist" class="dots"></div>
-                </div>
-            </div>
-            <div class="column is-narrow">
-                <div class="mars-info">
-                    <div class="block">
-                        <input class="input is-hidden" id="mars-calendar" type="date">
-                    </div>                                                                
-                </div>
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column">
-                <div class="block mars-exp has-text-justified">
-                    The <strong>${
-                      roverInfo.name
-                    }</strong> rover was launched from Cape Canaveral 
-                    on <strong>${
-                      roverInfo.launchDate
-                    }</strong>, and landed on Mars on 
-                    <strong>${roverInfo.landingDate}</strong>.   
-                    ${
-                      roverInfo.status === "complete"
-                        ? "The rover completed its mission on <strong>" +
-                          apodDateToString(
-                            state.rovers.selectedRoverInfo.completedDate,
-                            dateToStringConverter
-                          ) +
-                          "</strong>. While it was active, it sent "
-                        : "The rover is still active in Mars, and has sent "
-                    } 
-                    a total of <strong>198439</strong> photos to Earth.
-                </div>
-            </div>
-        </div>
-    </div>
-  `;
+  return getRoverInfo(state).then((roverInfo) => {
+    const name = roverInfo.selectedRoverInfo.name;
+    const launchDate = roverInfo.selectedRoverInfo.launchDate;
+    const landingDate = roverInfo.selectedRoverInfo.landingDate;
+    const completeDate = roverInfo.selectedRoverInfo.completeDate;
+    const status = roverInfo.selectedRoverInfo.status;
+    const totalPhotos = roverInfo.selectedRoverInfo.totalPhotos;
+    const date = roverInfo.photos.date;
+    const slides = roverInfo.photos.images
+      .map((image) => {
+        return '<div><img src="' + image + '" width="90%" alt="" /></div>';
+      })
+      .reduce((acc, slide) => acc + slide, "");
+    return marsPageTemplate(
+      name,
+      date,
+      launchDate,
+      landingDate,
+      completeDate,
+      status,
+      totalPhotos,
+      slides
+    );
+  });
 };
 
 /**
@@ -134,7 +92,8 @@ const MarsPage = (state) => {
  * @return {string} html - The HTML for the BeyondPage
  */
 const BeyondPage = (state) => {
-  const date = state.apod.reqDate || apodDateToString(new Date(), dateToStringConverter);
+  const date =
+    state.apod.reqDate || apodDateToString(new Date(), dateToStringConverter);
   const newStore = getDisabledDates(state);
   const image = getApodImage(date, state);
   if (!image) {
