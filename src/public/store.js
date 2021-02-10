@@ -4,7 +4,7 @@ let store = Immutable.Map({
   }),
   apod: Immutable.Map({
     reqDate: "",
-    checkedUntil: "2021-01-30",
+    checkedUntil: "2021-02-10",
     cachedImgs: Immutable.List([]),
     currentImg: Immutable.Map({}),
     disabledDates: Immutable.List([
@@ -288,6 +288,8 @@ let store = Immutable.Map({
       "2020-12-30",
       "2021-01-04",
       "2021-01-11",
+      "2021-02-03",
+      "2021-02-09",
     ]),
   }),
   epic: Immutable.Map({
