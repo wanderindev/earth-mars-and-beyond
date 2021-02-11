@@ -263,6 +263,10 @@ const aboutPageTemplate = () => {
                         <li>Using ES6 constructs like <em>const</em>, <em>let</em>, <em>arrow functions</em>, 
                         and <em>the new Array methods</em></li>
                     </ul>
+                    <p>
+                    The project needs to make frequent calls to external APIs.  I used Promises and the async / await
+                    wherever it made sense, to escape callback hell and make my code more readable.
+                    </p>
                     <h2 class="title is-size-3-desktop is-size-4-mobile">
                       The APIs
                     </h2>
