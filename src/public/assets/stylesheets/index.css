@@ -63,6 +63,10 @@ main {
     margin-right: 0;
 }
 
+h1 {
+    margin-bottom: 24px;
+}
+
 .earth,
 .mars,
 .beyond,
@@ -93,6 +97,9 @@ main {
     cursor: default;
     color: #000;
     font-weight: 500;
+}
+.navbar .menu-item.is-active:hover {
+    background-color: #fff;
 }
 
 .navbar .menu-item.earth {
