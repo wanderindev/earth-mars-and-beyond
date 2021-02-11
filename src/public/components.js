@@ -2,17 +2,14 @@ import {
   navbarTemplate,
   earthPageTemplate,
   marsPageTemplate,
-  beyondPageTemplate
+  beyondPageTemplate,
 } from "./templates.js";
 
 import {
   apodDateToString,
-  dateToStringConverter,
-  getDisabledDates,
   getApodImage,
   getEpicInfo,
   getRoverInfo,
-  getRoverPhotos,
 } from "./utils.js";
 
 /**
@@ -33,7 +30,7 @@ const PageContent = async (state) => {
   return `
     ${active === "earth" ? await EarthPage(state) : ""}
     ${active === "mars" ? await MarsPage(state) : ""}
-    ${active === "beyond" ? BeyondPage(state) : ""}
+    ${active === "beyond" ? await BeyondPage(state) : ""}
     ${active === "about" ? AboutPage() : ""}
   `;
 };
@@ -93,14 +90,10 @@ const MarsPage = (state) => {
  * @return {string} html - The HTML for the BeyondPage
  */
 const BeyondPage = (state) => {
-  const date =
-    state.apod.reqDate || apodDateToString(new Date(), dateToStringConverter);
-  const newStore = getDisabledDates(state);
-  const image = getApodImage(date, state);
-  if (!image) {
-    return ``;
-  }
-  return beyondPageTemplate(image.title, image.copyright, image.url, image.explanation, image.aspectRatio);
+  const date = state.apod.reqDate || apodDateToString(new Date());
+  return getApodImage(date, state).then((image) => {
+    return beyondPageTemplate(image);
+  });
 };
 
 /**

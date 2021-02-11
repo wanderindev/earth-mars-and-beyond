@@ -3,8 +3,6 @@
  * @module ./templates.js
  */
 
-import { apodDateToString, dateToStringConverter } from "./utils.js";
-
 /**
  * @description Returns the HTML for the NavBar component
  * @param {string} active - The name of the active page
@@ -180,21 +178,20 @@ const marsPageTemplate = (
   `;
 };
 
-const beyondPageTemplate = (
-  title,
-  copyright,
-  url,
-  explanation,
-  aspectRatio
-) => {
+/**
+ * @description Returns the HTML for the BeyondPage component
+ * @param {object} image - An object with the image information to display
+ * @return {string} html - The HTML for the BeyondPage component
+ */
+const beyondPageTemplate = (image) => {
   return `
     <div id="beyond">
         <div class="columns">
             <div class="column has-text-centered">
                 <h1 class="title is-size-1-desktop is-size-2-mobile">
-                  ${title}<br>
+                  ${image.title}<br>
                   <span class="subtitle is-4">
-                    ${copyright ? " by " + copyright : ""}
+                    ${image.copyright ? " by " + image.copyright : ""}
                   </span>
                 </h1>
             </div>
@@ -202,7 +199,7 @@ const beyondPageTemplate = (
         <div class="columns">
             <div class="column has-text-centered">
                 <div class="apod-img-wrapper">
-                    <img class="apod-img" src="${url}" alt="" />
+                    <img class="apod-img" src="${image.url}" alt="" />
                 </div>
             </div>
             <div class="column is-narrow">
@@ -216,17 +213,22 @@ const beyondPageTemplate = (
         <div class="columns">
             <div class="column">
                 <div class="block apod-exp has-text-justified">
-                    ${explanation}
+                    ${image.explanation}
                 </div>
             </div>
         </div>
     </div>
     <style>
         .apod-img-wrapper:after {
-            padding-bottom: ${aspectRatio}%;
+            padding-bottom: 100%;
         }            
     </style>
   `;
 };
 
-export { navbarTemplate, earthPageTemplate, marsPageTemplate, beyondPageTemplate };
+export {
+  navbarTemplate,
+  earthPageTemplate,
+  marsPageTemplate,
+  beyondPageTemplate,
+};

@@ -6,13 +6,14 @@ import {
   getRoverImages,
 } from "./api-calls.js";
 import { store } from "./store.js";
-import { updateAndRender, updateStore } from "./client.js";
+import { updateStore } from "./client.js";
 
 /**
  * @description Returns a string representing a date in format YYYY-MM-DD
+ * @param {Date} date - A Date object
  * @return {string} date - A string representing a date
  */
-const dateToStringConverter = (date) => {
+const apodDateToString = (date) => {
   return (
     date.getFullYear() +
     "-" +
@@ -23,30 +24,18 @@ const dateToStringConverter = (date) => {
 };
 
 /**
- * @description Returns a string representing a date in format YYYY-MM-DD
- * @param {Date} date - A Date object
- * @param {function} cb - A higher order function that returns a string from a date
- * @return {string} date - A string representing a date
- */
-const apodDateToString = (date, cb) => {
-  return cb(date);
-};
-
-/**
  * @description Returns a Date from a string in format YYYY-MM-DD
  * @param {string} date - A string representing a date
  * @return {Date} date - A Date object
  */
 const apodStringToDate = (date) => {
   return new Date(
-    getDateWithTimeString(
-      date !== "" ? date : apodDateToString(new Date(), dateToStringConverter)
-    )
+    getDateWithTimeString(date !== "" ? date : apodDateToString(new Date()))
   );
 };
 
 /**
- * @description Returns a string representing a date in format YYYY-MM-DD
+ * @description Adds the current APOD image to the cache
  * @param {object} image - An object representing an image
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
@@ -58,7 +47,7 @@ const cacheImage = (image, state) => {
     currentImg: image,
   });
 
-  return updateAndRender(store, {
+  return updateStore(store, {
     menu: state.menu,
     apod: newApod,
     epic: state.epic,
@@ -104,23 +93,14 @@ const getDateWithTimeString = (date) => {
  * @param {object} state - The application state
  * @return {float} aspectRatio - The image aspect ratio
  */
-const getImageAspectRatio = (image, state) => {
+const getImageAspectRatio = async (image, state) => {
   const img = new Image();
   img.src = image.url;
-
   img.onload = () => {
     const width = img.naturalWidth;
     const height = img.naturalHeight;
-    const aspectRatio = (height / width) * 100;
-    const newImage = Object.assign(image, { aspectRatio: aspectRatio });
 
-    if (
-      !state.apod.cachedImgs.map((image) => image.date).includes(image.date)
-    ) {
-      cacheImage(newImage, state);
-    }
-
-    return aspectRatio;
+    return (height / width) * 100;
   };
 };
 
@@ -129,33 +109,26 @@ const getImageAspectRatio = (image, state) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const getDisabledDates = (state) => {
+const getDisabledDates = async (state) => {
   const apod = state.apod;
   const startDate = apod.checkedUntil;
-  const endDate = apodDateToString(new Date(), dateToStringConverter);
-
-  if (startDate !== endDate) {
-    getApodImagesForDateRange(startDate, endDate).then((images) => {
-      const newDisabledDates = images
-        .filter((image) => image["media_type"] !== "image")
-        .map((image) => image.date);
-
-      if (newDisabledDates.length > 0) {
-        const updatedDates = [...apod.disabledDates, ...newDisabledDates];
-        const newApod = Object.assign(apod, {
-          disabledDates: updatedDates,
-          checkedUntil: endDate,
-        });
-
-        return updateStore(store, {
-          menu: state.menu,
-          apod: newApod,
-          epic: state.epic,
-          rovers: state.rovers,
-        });
-      }
-    });
-  }
+  const endDate = apodDateToString(new Date());
+  const apodImages = await getApodImagesForDateRange(startDate, endDate);
+  const newDisabledDates = apodImages
+    .filter((image) => image["media_type"] !== "image")
+    .map((image) => image.date);
+  const updatedDates = [...apod.disabledDates, ...newDisabledDates];
+  const newApod = Object.assign(apod, {
+    disabledDates: updatedDates,
+    checkedUntil: endDate,
+  });
+  const newState = updateStore(store, {
+    menu: state.menu,
+    apod: newApod,
+    epic: state.epic,
+    rovers: state.rovers,
+  });
+  return updatedDates;
 };
 
 /**
@@ -164,8 +137,9 @@ const getDisabledDates = (state) => {
  * @param {object} state - The application's state
  * @return {object} response - An object with the APOD image information
  */
-const getApodImage = (date, state) => {
+const getApodImage = async (date, state) => {
   const cachedImgsDates = state.apod.cachedImgs.map((image) => image.date);
+  const disabledDates = await getDisabledDates(state);
 
   // The requested image is the current image.
   if (state.apod.currentImg && state.apod.currentImg.date === date) {
@@ -175,17 +149,10 @@ const getApodImage = (date, state) => {
     return state.apod.cachedImgs.filter((image) => image.date === date)[0];
     // Get the new image from the API
   } else {
-    getApodImageForDate(date).then((image) => {
-      getImageAspectRatio(image, state);
-      return {
-        date: image.date,
-        title: image.title,
-        explanation: image.explanation,
-        copyright: image.copyright,
-        url: image.url,
-        aspectRatio: "",
-      };
-    });
+    const image = await getApodImageForDate(date);
+    const newState = cacheImage(image, state);
+
+    return image;
   }
 };
 
@@ -297,7 +264,6 @@ const getRoverInfo = async (state) => {
     epic: state.epic,
     rovers: newRover,
   });
-  console.log(newRover);
   return newRover;
 };
 
@@ -341,7 +307,6 @@ const getRoverPhotos = async (state) => {
     epic: state.epic,
     rovers: newRover,
   });
-  console.log(newRover.photos);
   return newRover.photos;
 };
 
@@ -349,10 +314,10 @@ export {
   apodDateToString,
   apodStringToDate,
   cacheImage,
-  dateToStringConverter,
   getApodDisabledDates,
   getDateWithTimeString,
   getDisabledDates,
+  getImageAspectRatio,
   getApodImage,
   getEpicInfo,
   getRoverInfo,

@@ -1,9 +1,4 @@
-import {
-  apodDateToString,
-  apodStringToDate,
-  dateToStringConverter,
-  getApodDisabledDates,
-} from "./utils.js";
+import { apodStringToDate, getApodDisabledDates } from "./utils.js";
 import { store } from "./store.js";
 import { updateAndRender } from "./client.js";
 
