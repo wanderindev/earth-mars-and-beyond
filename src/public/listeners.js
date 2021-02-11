@@ -40,20 +40,22 @@ const setListeners = (state) => {
               ? "2018-06-05"
               : "2010-03-03";
 
-          return updateAndRender(store, {
-            menu: { active: target },
-            apod: state.apod,
-            epic: state.epic,
-            rovers: {
-              selectedRover: rover,
-              selectedRoverInfo: state.rovers.selectedRoverInfo,
-              photos: {
-                reqDate: date,
-                date: "",
-                images: state.rovers.images,
+          if (target !== state.menu.active) {
+            return updateAndRender(store, {
+              menu: { active: target },
+              apod: state.apod,
+              epic: state.epic,
+              rovers: {
+                selectedRover: rover,
+                selectedRoverInfo: state.rovers.selectedRoverInfo,
+                photos: {
+                  reqDate: date,
+                  date: "",
+                  images: state.rovers.images,
+                },
               },
-            },
-          });
+            });
+          }
         });
       });
     }
