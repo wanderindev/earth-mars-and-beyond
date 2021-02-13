@@ -64,7 +64,7 @@ const MarsPage = (state) => {
     const name = roverInfo.selectedRoverInfo.name;
     const launchDate = roverInfo.selectedRoverInfo.launchDate;
     const landingDate = roverInfo.selectedRoverInfo.landingDate;
-    const completeDate = roverInfo.selectedRoverInfo.completeDate;
+    const completedDate = roverInfo.selectedRoverInfo.completedDate;
     const status = roverInfo.selectedRoverInfo.status;
     const totalPhotos = roverInfo.selectedRoverInfo.totalPhotos;
     const date = roverInfo.photos.date;
@@ -78,7 +78,7 @@ const MarsPage = (state) => {
       date,
       launchDate,
       landingDate,
-      completeDate,
+      completedDate,
       status,
       totalPhotos,
       slides

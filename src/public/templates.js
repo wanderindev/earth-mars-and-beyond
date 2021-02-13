@@ -112,7 +112,7 @@ const earthPageTemplate = (date, slides) => {
  * @param {string} date - A string representing the date of the rover photos to be shown
  * @param {string} launchDate - A string representing the rover's launch date
  * @param {string} landingDate - A string representing the rover's landing date
- * @param {string} completeDate - A string representing the rover's mission complete date
+ * @param {string} completedDate - A string representing the rover's mission complete date
  * @param {string} status - The mission status
  * @param {number} totalPhotos - The total number of photos sent by the rover
  * @param {string} slides - The HTML for the rover photo slides
@@ -123,7 +123,7 @@ const marsPageTemplate = (
   date,
   launchDate,
   landingDate,
-  completeDate,
+  completedDate,
   status,
   totalPhotos,
   slides
@@ -340,5 +340,5 @@ export {
   marsPageTemplate,
   beyondPageTemplate,
   aboutPageTemplate,
-  footerTemplate
+  footerTemplate,
 };

@@ -2,73 +2,68 @@ import { apodStringToDate, getApodDisabledDates } from "./utils.js";
 import { store } from "./store.js";
 import { updateAndRender } from "./client.js";
 
+const setupClickHandlers = (state) => {
+  document.addEventListener("click", (event) => {
+    const el = event.target;
+    const $collapsedMenu = document.getElementById("collapsed-menu");
+    const $burgers = document.getElementById("burgers");
+
+    // Handles click on the navbar and menu items
+    if (el.matches(".navbar-item.menu-item")) {
+      const target = el.dataset.target;
+      const rover = el.dataset.rover;
+      const date =
+        rover === "curiosity"
+          ? "2021-01-29"
+          : rover === "opportunity"
+          ? "2018-06-05"
+          : "2010-03-03";
+
+      if (
+        target !== state.menu.active ||
+        rover !== state.rovers.selectedRover
+      ) {
+        return updateAndRender(store, {
+          menu: { active: target },
+          apod: state.apod,
+          epic: state.epic,
+          rovers: {
+            selectedRover: rover,
+            selectedRoverInfo: state.rovers.selectedRoverInfo,
+            photos: {
+              reqDate: date,
+              date: "",
+              images: state.rovers.images,
+            },
+          },
+        });
+      }
+    }
+
+    // Handles click on the navbar dropdowns
+    if (el.parentNode.matches("#mars-dropdown")) {
+      el.parentNode.classList.add("is-active");
+    }
+
+    // Handles click on the navbar burgers
+    if (
+      (el.parentNode.matches("#burgers") || el.matches("#burgers")) &&
+      !$burgers.getAttribute("clickListenerAdded")
+    ) {
+      $burgers.setAttribute("clickListenerAdded", true);
+      $burgers.classList.toggle("is-active");
+      $collapsedMenu.classList.toggle("is-active");
+    }
+  });
+};
+
 /**
- * @description Attaches event listeners to various DOM elements.  This function is called from the render() function.
+ * @description Initializes the calendar and glider components after DOM is ready
  * @param {object} state - The application's state
  */
-const setListeners = (state) => {
-  // Adds event listeners after the page is rendered
+const initComponents = (state) => {
   setTimeout(() => {
-    // Adds listeners for the navbar and menu items
-    const $navbarBurgers = document.getElementById("burgers");
-    const $menuItems = Array.prototype.slice.call(
-      document.querySelectorAll(".menu-item"),
-      0
-    );
-    const $navbarLinks = Array.prototype.slice.call(
-      document.querySelectorAll(".navbar-link"),
-      0
-    );
-    if ($navbarBurgers && !$navbarBurgers.getAttribute("clickListenerAdded")) {
-      $navbarBurgers.setAttribute("clickListenerAdded", true);
-      $navbarBurgers.addEventListener("click", () => {
-        const $target = document.getElementById($navbarBurgers.dataset.target);
-
-        $navbarBurgers.classList.toggle("is-active");
-        $target.classList.toggle("is-active");
-      });
-    }
-    if ($menuItems.length > 0) {
-      $menuItems.forEach((el) => {
-        el.addEventListener("click", () => {
-          const target = el.dataset.target;
-          const rover = el.dataset.rover;
-          const date =
-            rover === "curiosity"
-              ? "2021-01-29"
-              : rover === "opportunity"
-              ? "2018-06-05"
-              : "2010-03-03";
-
-          if (target !== state.menu.active) {
-            return updateAndRender(store, {
-              menu: { active: target },
-              apod: state.apod,
-              epic: state.epic,
-              rovers: {
-                selectedRover: rover,
-                selectedRoverInfo: state.rovers.selectedRoverInfo,
-                photos: {
-                  reqDate: date,
-                  date: "",
-                  images: state.rovers.images,
-                },
-              },
-            });
-          }
-        });
-      });
-    }
-    if ($navbarLinks.length > 0) {
-      $navbarLinks.forEach((el) => {
-        el.addEventListener("click", () => {
-          const $target = document.getElementById("mars-dropdown");
-          $target.classList.add("is-active");
-        });
-      });
-    }
-
-    // Adds listener for the APOD calendar
+    // Inits the APOD calendar
     const $apodCalendar = document.querySelector("#apod-calendar");
     // noinspection JSUnresolvedVariable
     bulmaCalendar.attach("#apod-calendar", {
@@ -101,7 +96,7 @@ const setListeners = (state) => {
       });
     }
 
-    // Adds listener for the Mars rovers calendar
+    // Inits the Mars rovers calendar
     const $marsCalendar = document.querySelector("#mars-calendar");
     // noinspection JSUnresolvedVariable
     bulmaCalendar.attach("#mars-calendar", {
@@ -142,7 +137,7 @@ const setListeners = (state) => {
       });
     }
 
-    // Adds listener for the photo carousels
+    // Inits the photo carousels
     const $carousel = document.querySelector("#carousel");
     if ($carousel) {
       // noinspection JSUnresolvedFunction
@@ -158,4 +153,4 @@ const setListeners = (state) => {
   }, 500);
 };
 
-export { setListeners };
+export { setupClickHandlers, initComponents };

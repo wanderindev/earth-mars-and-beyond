@@ -1,5 +1,5 @@
 import { Footer, NavBar, PageContent } from "./components.js";
-import { setListeners } from "./listeners.js";
+import { setupClickHandlers, initComponents } from "./listeners.js";
 import { store } from "./store.js";
 
 const root = document.getElementById("root");
@@ -30,7 +30,8 @@ const updateAndRender = (state, newState) => {
  */
 const render = async (root, state) => {
   root.innerHTML = await App(state.toJS());
-  setListeners(state.toJS());
+  setupClickHandlers(state.toJS());
+  initComponents(state.toJS());
 };
 
 /**
