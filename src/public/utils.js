@@ -181,7 +181,8 @@ const getEpicDate = (image) => {
  * @return {object} newEpic - An object with the EPIC information
  */
 const getEpicInfo = async (state) => {
-  const images = await getLatestEpicImages();
+  const imgs = await getLatestEpicImages();
+  const images = imgs.filter(img => img.date !== null);
   const { year, month, day, date } = getEpicDate(images[0]);
   const epicImages = images.map((image) => {
     return {
