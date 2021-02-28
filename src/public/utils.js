@@ -182,7 +182,7 @@ const getEpicDate = (image) => {
  */
 const getEpicInfo = async (state) => {
   const imgs = await getLatestEpicImages();
-  const images = imgs.filter(img => img.date !== null);
+  const images = imgs.filter((img) => img.date !== null);
   const { year, month, day, date } = getEpicDate(images[0]);
   const epicImages = images.map((image) => {
     return {
@@ -241,7 +241,12 @@ const getRoverDisabledDates = (photos, minDate) => {
 const getRoverInfo = async (state) => {
   const manifest = await getRoverManifest(state.rovers.selectedRover);
   const name = manifest.photo_manifest.name;
-  const cutOff = name === "Curiosity" ? -1 : name === "Spirit" ? -17 : -5;
+  const cutOff =
+    name === "Curiosity" || name === "Perseverance"
+      ? -1
+      : name === "Spirit"
+      ? -17
+      : -5;
   const photos = manifest.photo_manifest.photos;
   const roverPhotos = await getRoverPhotos(state);
   const newRover = Object.assign(state.rovers, {
@@ -277,7 +282,24 @@ const getRoverInfo = async (state) => {
 const getSelectedPhotos = (photos) => {
   const images = photos.photos
     .filter((photo) =>
-      ["FHAZ", "NAVCAM", "PANCAM", "RHAZ"].includes(photo.camera.name)
+      [
+        "FHAZ",
+        "NAVCAM",
+        "PANCAM",
+        "RHAZ",
+        "FRONT_HAZCAM_LEFT_A",
+        "FRONT_HAZCAM_RIGHT_A",
+        "NAVCAM_LEFT",
+        "NAVCAM_RIGHT",
+        "REAR_HAZCAM_LEFT",
+        "REAR_HAZCAM_RIGHT",
+        "EDL_DDCAM",
+        "EDL_RDCAM",
+        "MCZ_LEFT",
+        "MCZ_RIGHT",
+        "EDL_PUCAM1",
+        "EDL_RDCAM"
+      ].includes(photo.camera.name)
     )
     .map((photo) => photo.img_src);
   return [...images].sort(() => 0.5 - Math.random()).slice(0, 25);

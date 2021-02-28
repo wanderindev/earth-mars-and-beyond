@@ -14,7 +14,7 @@ const setupClickHandlers = (state) => {
       const rover = el.dataset.rover;
       const today = new Date();
       let threeDaysAgo = new Date(today);
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 6)
       const date =
         rover === "curiosity" || rover === "perseverance"
           ? apodDateToString(threeDaysAgo)

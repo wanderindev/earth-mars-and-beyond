@@ -25,6 +25,7 @@ const navbarTemplate = (active) => {
     <div id="collapsed-menu" class="navbar-menu">
         <div class="navbar-end">  
             <a class="navbar-item menu-item" data-target="earth">Earth</a>  
+            <a class="navbar-item menu-item" data-target="mars" data-rover="perseverance">Mars > Perseverance Rover</a>
             <a class="navbar-item menu-item" data-target="mars" data-rover="curiosity">Mars > Curiosity Rover</a>
             <a class="navbar-item menu-item" data-target="mars" 
                data-rover="opportunity">Mars > Opportunity Rover</a>
@@ -41,6 +42,8 @@ const navbarTemplate = (active) => {
             <div id="mars-dropdown" class="navbar-item has-dropdown mars">
                 <a class="navbar-link" data-target="mars">Mars</a>
                 <div class="navbar-dropdown">
+                    <a class="navbar-item menu-item perseverance" data-target="mars" 
+                       data-rover="perseverance">Perseverance Rover</a>
                     <a class="navbar-item menu-item curiosity" data-target="mars" 
                        data-rover="curiosity">Curiosity Rover</a>
                     <a class="navbar-item menu-item opportunity" data-target="mars" 
