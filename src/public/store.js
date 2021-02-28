@@ -4,7 +4,7 @@ let store = Immutable.Map({
   }),
   apod: Immutable.Map({
     reqDate: "",
-    checkedUntil: "2021-02-10",
+    checkedUntil: "2021-02-27",
     cachedImgs: Immutable.List([]),
     currentImg: Immutable.Map({}),
     disabledDates: Immutable.List([
