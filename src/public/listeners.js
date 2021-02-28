@@ -1,4 +1,4 @@
-import { apodStringToDate, getApodDisabledDates } from "./utils.js";
+import { apodDateToString, apodStringToDate, getApodDisabledDates } from "./utils.js";
 import { store } from "./store.js";
 import { updateAndRender } from "./client.js";
 
@@ -12,9 +12,12 @@ const setupClickHandlers = (state) => {
     if (el.matches(".navbar-item.menu-item")) {
       const target = el.dataset.target;
       const rover = el.dataset.rover;
+      const today = new Date();
+      let threeDaysAgo = new Date(today);
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
       const date =
-        rover === "curiosity"
-          ? "2021-01-29"
+        rover === "curiosity" || rover === "perseverance"
+          ? apodDateToString(threeDaysAgo)
           : rover === "opportunity"
           ? "2018-06-05"
           : "2010-03-03";

@@ -240,13 +240,14 @@ const getRoverDisabledDates = (photos, minDate) => {
  */
 const getRoverInfo = async (state) => {
   const manifest = await getRoverManifest(state.rovers.selectedRover);
+  const name = manifest.photo_manifest.name;
   const cutOff = name === "Curiosity" ? -1 : name === "Spirit" ? -17 : -5;
   const photos = manifest.photo_manifest.photos;
   const roverPhotos = await getRoverPhotos(state);
   const newRover = Object.assign(state.rovers, {
     selectedRover: state.rovers.selectedRover,
     selectedRoverInfo: {
-      name: manifest.photo_manifest.name,
+      name: name,
       minDate: apodStringToDate(photos[0].earth_date),
       maxDate: apodStringToDate(photos.slice(cutOff)[0].earth_date),
       disabledDates: getRoverDisabledDates(photos, photos[0].earth_date),
