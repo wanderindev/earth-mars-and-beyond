@@ -239,7 +239,7 @@ const aboutPageTemplate = () => {
         <div class="columns">
             <div class="column has-text-centered">
                 <h1 class="title is-size-1-desktop is-size-2-mobile">
-                  About Earth, Mars, and Beyond...<br>
+                  About Earth, Mars and Beyond...<br>
                 </h1>
             </div>
         </div>
@@ -247,28 +247,34 @@ const aboutPageTemplate = () => {
             <div class="column">
                 <div class="block about-exp has-text-justified">
                     <p>
-                    This website is my second project submission for the <em>Udacity Intermediate 
-                    JavaScript Nanodegree</em>.  In this project, I applied the lessons learned in 
-                    the <em>Functional Programming in JavaScript</em> course.                            
+                    Humans, in general, are fascinated by astronomy.  I certainly am.  In fact, among all sciences, 
+                    astronomy proves to be one of the most popular fields.                            
+                    </p>
+                    <p>
+                    NASA caters to astronomy's hold on human imagination by exposing to the general public a series of 
+                    interesting APIs.                            
+                    </p>
+                    <p>
+                    This website consumes information from those APIs and presents it in a way that renders 
+                    tribute to our universe and the outstanding human achievements in space exploration.                            
                     </p>
                     <h2 class="title is-size-3-desktop is-size-4-mobile">
                       The Big Picture
                     </h2>
                     <p>
-                    For this project, I had to create a website that consumes from various 
-                    NASA APIs.  The goal is to apply the concepts and practices learned in 
-                    the functional programming course, such as:
+                    This is an experimental website.  My goal for the site was to use functional style JavaScript, 
+                    to consume and render information from complex APIs.  Some features of the project are:
                     </p>
                     <ul>
-                        <li>Using pure functions</li>
-                        <li>Supporting immutability with Immutable JS</li>
-                        <li>Iterating over, reshaping, and accessing information from complex API responses</li>
-                        <li>Using ES6 constructs like <em>const</em>, <em>let</em>, <em>arrow functions</em>, 
+                        <li>It was coded using pure functions</li>
+                        <li>Supports immutability with Immutable JS</li>
+                        <li>Accesses, iterates over and reshapes information from complex API responses</li>
+                        <li>Uses ES6 constructs like <em>const</em>, <em>let</em>, <em>arrow functions</em>, 
                         and <em>the new Array methods</em></li>
                     </ul>
                     <p>
-                    The project needs to make frequent calls to external APIs.  I used Promises and the async / await
-                    wherever it made sense, to escape callback hell and make my code more readable.
+                    The site makes frequent calls to external APIs.  I used Promises and the async / await
+                    keywords wherever it made sense, to escape <em>callback hell</em> and make my code more readable.
                     </p>
                     <h2 class="title is-size-3-desktop is-size-4-mobile">
                       The APIs
@@ -290,20 +296,6 @@ const aboutPageTemplate = () => {
                           <em>Astronomy Picture of the Day</em>.  In this section, you will find beautiful 
                           pictures from the cosmos and exciting information about them.
                         </li>
-                    </ul>
-                    <h2 class="title is-size-3-desktop is-size-4-mobile">
-                      Useful Links
-                    </h2>
-                    <p>
-                    <ul>
-                        <li>You can find my code in <a href="https://github.com/wanderindev/earth-mars-and-beyond" 
-                        target="_blank">this GitHub repository</a></li>
-                        <li>For the starter code from Udacity, visit <a href="https://github.com/udacity/nd032-c2-functional-programming-with-javascript-starter/tree/project" 
-                        target="_blank">this repository</a></li>
-                        <li>The nanodegree home page is <a href="https://www.udacity.com/course/intermediate-javascript-nanodegree--nd032" 
-                        target="_blank">here</a></li>
-                        <li>Find more information about these and other NASA APIs <a href="https://api.nasa.gov/" 
-                        target="_blank">here</a></li>
                     </ul>
                 </div>
             </div>
