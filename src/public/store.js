@@ -1,13 +1,13 @@
-let store = Immutable.Map({
-  menu: Immutable.Map({
+let store = {
+  menu: {
     active: "about",
-  }),
-  apod: Immutable.Map({
+  },
+  apod: {
     reqDate: "",
     checkedUntil: "2021-02-27",
-    cachedImgs: Immutable.List([]),
-    currentImg: Immutable.Map({}),
-    disabledDates: Immutable.List([
+    cachedImgs: [],
+    currentImg: {},
+    disabledDates: [
       "2008-07-22",
       "2008-11-25",
       "2010-11-24",
@@ -290,31 +290,31 @@ let store = Immutable.Map({
       "2021-01-11",
       "2021-02-03",
       "2021-02-09",
-    ]),
-  }),
-  epic: Immutable.Map({
+    ],
+  },
+  epic: {
     date: "",
-    images: Immutable.List([]),
-  }),
-  rovers: Immutable.Map({
+    images: [],
+  },
+  rovers: {
     selectedRover: "",
-    selectedRoverInfo: Immutable.Map({
+    selectedRoverInfo: {
       name: "",
       minDate: "",
       maxDate: "",
-      disabledDates: Immutable.List([]),
+      disabledDates: [],
       startDate: "",
       launchDate: "",
       landingDate: "",
       totalPhotos: "",
       status: "",
-    }),
-    photos: Immutable.Map({
+    },
+    photos: {
       reqDate: "",
       date: "",
-      images: Immutable.List([]),
-    }),
-  }),
-});
+      images: [],
+    },
+  },
+};
 
 export { store };
