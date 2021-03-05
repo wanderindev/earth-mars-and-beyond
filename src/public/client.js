@@ -10,7 +10,7 @@ const root = document.getElementById("root");
  * @param {object} newState - The application's new state
  */
 const updateStore = (state, newState) => {
-  return state.merge(newState);
+  return Object.assign(state, newState);
 };
 
 /**
@@ -29,9 +29,9 @@ const updateAndRender = (state, newState) => {
  * @param {object} state - The application's state
  */
 const render = async (root, state) => {
-  root.innerHTML = await App(state.toJS());
-  setupClickHandlers(state.toJS());
-  initComponents(state.toJS());
+  root.innerHTML = await App(state);
+  setupClickHandlers(state);
+  initComponents(state);
 };
 
 /**
