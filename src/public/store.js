@@ -4,7 +4,7 @@ let store = {
   },
   apod: {
     reqDate: "",
-    checkedUntil: "2021-02-27",
+    checkedUntil: "2021-02-19",
     cachedImgs: [],
     currentImg: {},
     disabledDates: [
@@ -290,6 +290,8 @@ let store = {
       "2021-01-11",
       "2021-02-03",
       "2021-02-09",
+      "2021-03-09",
+      "2021-03-15"
     ],
   },
   epic: {

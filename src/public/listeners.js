@@ -12,12 +12,9 @@ const setupClickHandlers = (state) => {
     if (el.matches(".navbar-item.menu-item")) {
       const target = el.dataset.target;
       const rover = el.dataset.rover;
-      const today = new Date();
-      let threeDaysAgo = new Date(today);
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 6)
       const date =
         rover === "curiosity" || rover === "perseverance"
-          ? apodDateToString(threeDaysAgo)
+          ? "2021-03-18"
           : rover === "opportunity"
           ? "2018-06-05"
           : "2010-03-03";
