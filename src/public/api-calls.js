@@ -1,4 +1,5 @@
-const backendUrl = "http://localhost:3000";
+const backendUrl = "https://api.earth-mars-and-beyond.com";
+//const backendUrl = "http://localhost:3000";
 
 /**
  * @description Gets the APOD image information from the backend

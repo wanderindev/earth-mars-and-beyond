@@ -187,6 +187,7 @@ const marsPageTemplate = (
  * @return {string} html - The HTML for the BeyondPage component
  */
 const beyondPageTemplate = (image) => {
+  console.log("template", image);
   return `
     <div id="beyond">
         <div class="columns">

@@ -40,7 +40,7 @@ const apodStringToDate = (date) => {
  * @param {object} state - The application's current state
  * @return {object} newState - The application's updated state
  */
-const cacheImage = (image, state) => {
+const cacheImage = async (image, state) => {
   const newCachedImgs = [...state.apod.cachedImgs, image];
   const newApod = Object.assign(state.apod, {
     cachedImgs: newCachedImgs,
@@ -90,10 +90,10 @@ const getDateWithTimeString = (date) => {
 /**
  * @description Returns the aspect ratio for the image
  * @param {object} image - An object representing and APOD image
- * @param {object} state - The application state
+ * @param {object} state - The application's current state
  * @return {float} aspectRatio - The image aspect ratio
  */
-const getImageAspectRatio = async (image, state) => {
+const getImageAspectRatio = (image, state) => {
   const img = new Image();
   img.src = image.url;
   img.onload = () => {
@@ -298,7 +298,7 @@ const getSelectedPhotos = (photos) => {
         "MCZ_LEFT",
         "MCZ_RIGHT",
         "EDL_PUCAM1",
-        "EDL_RDCAM"
+        "EDL_RDCAM",
       ].includes(photo.camera.name)
     )
     .map((photo) => photo.img_src);
