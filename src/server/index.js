@@ -29,6 +29,7 @@ app.get("/apod/get_image", async (req, res) => {
   }
 });
 
+
 // Connects to NASA's APOD API and retrieves the images for a date range
 app.get("/apod/get_images", async (req, res) => {
   const { start_date, end_date } = req.query;

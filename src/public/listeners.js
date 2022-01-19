@@ -14,7 +14,7 @@ const setupClickHandlers = (state) => {
       const rover = el.dataset.rover;
       const date =
         rover === "curiosity" || rover === "perseverance"
-          ? "2021-03-18"
+          ? "2022-01-19"
           : rover === "opportunity"
           ? "2018-06-05"
           : "2010-03-03";
